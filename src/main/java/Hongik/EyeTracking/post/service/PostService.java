@@ -10,7 +10,6 @@ import Hongik.EyeTracking.post.dto.response.ReadPostResponseDto;
 import Hongik.EyeTracking.post.repository.PostRepository;
 import Hongik.EyeTracking.user.domain.User;
 import Hongik.EyeTracking.user.repository.UserRepository;
-import jakarta.transaction.TransactionScoped;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
