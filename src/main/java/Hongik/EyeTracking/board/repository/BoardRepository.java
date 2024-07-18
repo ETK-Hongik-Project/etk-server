@@ -12,4 +12,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findByKeyWord(@Param("keyword")String keyword);
 
     boolean existsById(Long boardId);
+
+    boolean existsByName(String name);
 }

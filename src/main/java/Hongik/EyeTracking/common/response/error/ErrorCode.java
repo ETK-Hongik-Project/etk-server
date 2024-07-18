@@ -45,6 +45,7 @@ public enum ErrorCode {
      */
     USERNAME_ALREADY_EXISTS("이미 사용중인 아이디입니다"),
     EMAIL_ALREADY_EXISTS("이미 사용중인 이메일입니다"),
+    BOARD_ALREADY_EXISTS("이미 존재하는 게시판입니다"),
 
     /**
      * 500 Internal Server Error
