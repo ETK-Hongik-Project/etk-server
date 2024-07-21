@@ -1,10 +1,13 @@
 package Hongik.EyeTracking.post.dto.response;
 
 import Hongik.EyeTracking.post.domain.Post;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -16,12 +19,16 @@ public class ReadPostResponseDto {
     private String content;
     private String authorName;
 
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private LocalDateTime createdTime;
+
     public static ReadPostResponseDto from(Post post) {
         ReadPostResponseDto response = new ReadPostResponseDto();
 
         response.title = post.getTitle();
         response.content = post.getContent();
         response.authorName = post.isAnonymous() || post.getAuthor() == null ? "익명" : post.getAuthor().getUsername();
+        response.createdTime = post.getCreatedDate();
 
         return response;
     }
@@ -32,6 +39,7 @@ public class ReadPostResponseDto {
         response.title = post.getTitle();
         response.content = post.getContent();
         response.authorName = post.isAnonymous()  ? "익명" : userName;
+        response.createdTime = post.getCreatedDate();
 
         return response;
     }

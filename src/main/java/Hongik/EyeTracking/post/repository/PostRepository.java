@@ -1,6 +1,5 @@
 package Hongik.EyeTracking.post.repository;
 
-import Hongik.EyeTracking.board.domain.Board;
 import Hongik.EyeTracking.post.domain.Post;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
@@ -16,9 +15,17 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findById(Long postId);
 
     List<Post> findByAuthorId(Long userId);
+
     List<Post> findByAuthorId(Long userId, Pageable pageable);
 
     List<Post> findByBoardId(Long boardId);
+
+    @EntityGraph(attributePaths = {"author"})
     List<Post> findByBoardId(Long boardId, Pageable pageable);
 
+    @Query("select p from Post p " +
+            "where p.title like %:keyword% " +
+            "and p.board.id = :boardId")
+    @EntityGraph(attributePaths = {"author"})
+    List<Post> findByBoardIdAndKeyword(@Param("boardId") Long boardId, @Param("keyword") String keyword, Pageable pageable);
 }

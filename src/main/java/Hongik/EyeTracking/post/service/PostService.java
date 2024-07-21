@@ -2,10 +2,15 @@ package Hongik.EyeTracking.post.service;
 
 import Hongik.EyeTracking.board.domain.Board;
 import Hongik.EyeTracking.board.repository.BoardRepository;
+import Hongik.EyeTracking.comment.repository.CommentRepository;
 import Hongik.EyeTracking.common.response.error.ErrorCode;
+import Hongik.EyeTracking.common.response.error.exception.BadRequestException;
 import Hongik.EyeTracking.common.response.error.exception.NotFoundException;
 import Hongik.EyeTracking.post.domain.Post;
 import Hongik.EyeTracking.post.dto.request.CreatePostRequestDto;
+import Hongik.EyeTracking.post.dto.request.ModifyPostRequestDto;
+import Hongik.EyeTracking.post.dto.response.CreatePostResponseDto;
+import Hongik.EyeTracking.post.dto.response.ModifyPostResponseDto;
 import Hongik.EyeTracking.post.dto.response.ReadPostResponseDto;
 import Hongik.EyeTracking.post.repository.PostRepository;
 import Hongik.EyeTracking.user.domain.User;
@@ -28,9 +33,10 @@ public class PostService {
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private static final int PAGE_SIZE = 10;
+    private final CommentRepository commentRepository;
 
     @Transactional
-    public Long createPost(String username, Long boardId, CreatePostRequestDto requestDto) {
+    public CreatePostResponseDto createPost(String username, Long boardId, CreatePostRequestDto requestDto) {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new NotFoundException(ErrorCode.USER_NOT_FOUND)
         );
@@ -49,7 +55,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        return post.getId();
+        return CreatePostResponseDto.from(post);
     }
 
     public ReadPostResponseDto getPost(Long postId) {
@@ -89,11 +95,51 @@ public class PostService {
         return responses;
     }
 
-    @Transactional
-    public void deletePost(Long postId) {
-        if (!postRepository.existsById(postId)) {
-            throw new NotFoundException(ErrorCode.POST_NOT_FOUND);
+    public List<ReadPostResponseDto> getPostsOfBoard(Long boardId, int pageNo, String keyword) {
+        if (boardRepository.existsById(boardId)) {
+            throw new NotFoundException(ErrorCode.BOARD_NOT_FOUND);
         }
+
+        List<ReadPostResponseDto> responses = new ArrayList<>();
+
+        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, Sort.Direction.DESC, "createdDate");
+        postRepository.findByBoardIdAndKeyword(boardId, keyword, pageable).forEach(post ->
+                responses.add(ReadPostResponseDto.from(post))
+        );
+
+        return responses;
+    }
+
+    @Transactional
+    public ModifyPostResponseDto updatePost(String username, Long postId, ModifyPostRequestDto requestDto) {
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new NotFoundException(ErrorCode.POST_NOT_FOUND)
+        );
+
+        if (post.getAuthor().getUsername().equals(username)) {
+            throw new BadRequestException(ErrorCode.NOT_USER_POST);
+        }
+
+        post.updateContent(requestDto.getContent());
+
+        return ModifyPostResponseDto.from(post);
+    }
+
+    @Transactional
+    public void deletePost(String username, Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() ->
+                new NotFoundException(ErrorCode.POST_NOT_FOUND)
+        );
+
+        if (!post.getAuthor().getUsername().equals(username)) {
+            throw new BadRequestException(ErrorCode.NOT_USER_POST);
+        }
+
+        // 연관관계 제거
+        commentRepository.findByPostId(postId).forEach(comment ->
+                comment.updateParentComment(null)
+        );
+        commentRepository.deleteByPostId(postId);
 
         postRepository.deleteById(postId);
     }
