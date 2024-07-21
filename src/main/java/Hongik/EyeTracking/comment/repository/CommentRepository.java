@@ -18,5 +18,11 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     List<Comment> findByCommenterId(Long userId);
 
+    @EntityGraph(attributePaths = {"commenter"})
+    List<Comment> findByParentCommentId(Long parentCommentId);
+
+    @EntityGraph(attributePaths = {"commenter"})
+    List<Comment> findByPostIdAndParentCommentId(Long postId, Long parentCommentId);
+
     void deleteByPostId(Long postId);
 }

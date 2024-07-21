@@ -15,6 +15,7 @@ public enum ErrorCode {
     ACCESS_TOKEN_NOT_MATCH("엑세스 토큰을 확인해주세요"),
     REFRESH_TOKEN_NOT_MATCH("리프레시 토큰을 확인해주세요"),
     NOT_USER_POST("해당 유저의 게시물이 아닙니다"),
+    NOT_USER_COMMENT("유저의 댓글이 아닙니다"),
 
 
 
