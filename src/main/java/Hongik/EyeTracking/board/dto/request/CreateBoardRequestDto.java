@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class CreateBoardRequestDto {
     @NotBlank(message = "게시판 이름이 입력되지 않았습니다")
     private String name;

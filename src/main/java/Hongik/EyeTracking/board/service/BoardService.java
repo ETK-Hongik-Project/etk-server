@@ -5,9 +5,13 @@ import Hongik.EyeTracking.board.dto.request.CreateBoardRequestDto;
 import Hongik.EyeTracking.board.dto.response.CreateBoardResponseDto;
 import Hongik.EyeTracking.board.dto.response.ReadBoardResponseDto;
 import Hongik.EyeTracking.board.repository.BoardRepository;
+import Hongik.EyeTracking.comment.domain.Comment;
+import Hongik.EyeTracking.comment.repository.CommentRepository;
 import Hongik.EyeTracking.common.response.error.ErrorCode;
 import Hongik.EyeTracking.common.response.error.exception.DuplicateException;
 import Hongik.EyeTracking.common.response.error.exception.NotFoundException;
+import Hongik.EyeTracking.post.domain.Post;
+import Hongik.EyeTracking.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardRepository boardRepository;
+    private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public CreateBoardResponseDto createBoard(CreateBoardRequestDto requestDto) {
@@ -57,6 +63,18 @@ public class BoardService {
             throw new NotFoundException(ErrorCode.BOARD_NOT_FOUND);
         }
 
+        List<Post> posts = postRepository.findByBoardId(boardId);
+        posts.forEach(post -> {
+            // post의 모든 comment 제거
+            List<Comment> comments = commentRepository.findByPostId(post.getId());
+            comments.forEach(comment -> comment.updateParentComment(null));
+
+            commentRepository.deleteAll(comments);
+        });
+        // board의 모든 post 제거
+        postRepository.deleteAll(posts);
+
+        // board 제거
         boardRepository.deleteById(boardId);
     }
 }
