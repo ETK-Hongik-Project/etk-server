@@ -14,6 +14,7 @@ public enum ErrorCode {
     BAD_REQUEST("잘못된 요청입니다."),
     ACCESS_TOKEN_NOT_MATCH("엑세스 토큰을 확인해주세요"),
     REFRESH_TOKEN_NOT_MATCH("리프레시 토큰을 확인해주세요"),
+    NOT_USER_POST("해당 유저의 게시물이 아닙니다"),
 
 
 
@@ -34,6 +35,7 @@ public enum ErrorCode {
     USER_NOT_FOUND("존재하지 않는 유저입니다"),
     BOARD_NOT_FOUND("존재하지 않는 게시판입니다"),
     POST_NOT_FOUND("존재하지 않는 게시물입니다"),
+    COMMENT_NOT_FOUND("존재하지 않는 댓글입니다"),
 
 
     /**
