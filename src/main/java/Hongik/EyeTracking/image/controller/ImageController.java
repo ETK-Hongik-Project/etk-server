@@ -19,20 +19,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static Hongik.EyeTracking.common.response.HttpResponse.*;
+
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
 @Slf4j
 public class ImageController {
     private final ImageService imageService;
-    private static final String OK = "200";
-    private static final String CREATED = "201";
-    private static final String BAD_REQUEST = "400";
-    private static final String NOT_FOUND = "404";
 
     @Operation(summary = "이미지 저장")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = CREATED, description = "즐겨찾기 성공적 추가"),
+            @ApiResponse(responseCode = CREATED, description = "이미지 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
     @PostMapping(value = "/users/{username}/images", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
