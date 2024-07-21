@@ -48,4 +48,8 @@ public class Comment extends BaseEntity {
     public void updateCommenter(User user) {
         this.commenter = user;
     }
+
+    public void updateParentComment(Comment parentComment) {
+        this.parentComment = parentComment;
+    }
 }
