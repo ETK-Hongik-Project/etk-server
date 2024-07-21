@@ -29,7 +29,7 @@ public class CommentController {
             @ApiResponse(responseCode = CREATED, description = "comment 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우")
     })
-    @PostMapping("/user/{username}/posts/{postId}")
+    @PostMapping("/user/{username}/posts/{postId}/comments")
     public ResponseEntity<BaseResponse<CreateCommentResponseDto>> createComment(@PathVariable("username") String username, @PathVariable("postId") Long postId, @Valid @RequestBody CreateCommentRequestDto requestDto) {
         CreateCommentResponseDto response = commentService.createComment(username, postId, requestDto);
 
@@ -55,7 +55,7 @@ public class CommentController {
             @ApiResponse(responseCode = OK, description = "comment 조회 성공"),
             @ApiResponse(responseCode = NOT_FOUND, description = "postId를 가지는 post가 존재하지 않는 경우")
     })
-    @GetMapping("/posts/{postId}")
+    @GetMapping("/posts/{postId}/comments")
     public ResponseEntity<BaseResponse<List<ReadCommentResponseDto>>> readComment(@PathVariable("postId") Long postId) {
         List<ReadCommentResponseDto> responses = commentService.readCommentsOfPost(postId);
 
