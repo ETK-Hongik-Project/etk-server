@@ -112,6 +112,10 @@ public class PostService {
 
     @Transactional
     public ModifyPostResponseDto updatePost(String username, Long postId, ModifyPostRequestDto requestDto) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new NotFoundException(ErrorCode.POST_NOT_FOUND)
         );
@@ -127,6 +131,10 @@ public class PostService {
 
     @Transactional
     public void deletePost(String username, Long postId) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
         Post post = postRepository.findById(postId).orElseThrow(() ->
                 new NotFoundException(ErrorCode.POST_NOT_FOUND)
         );
@@ -139,8 +147,11 @@ public class PostService {
         commentRepository.findByPostId(postId).forEach(comment ->
                 comment.updateParentComment(null)
         );
+
+        // post의 comment들 제거
         commentRepository.deleteByPostId(postId);
 
+        // post 제거
         postRepository.deleteById(postId);
     }
 }
