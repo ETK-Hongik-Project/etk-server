@@ -34,9 +34,9 @@ public class ImageController {
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
     @PostMapping(value = "/users/{username}/images", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<BaseResponse> uploadImage(@PathVariable("username") String username, @ModelAttribute("file") MultipartFile[] files) {
+    // swagger 사용하려면 @RequestParam("file")에서 @ModelAttribute("file")로 변경해야함
+    public ResponseEntity<BaseResponse> uploadImage(@PathVariable("username") String username, @RequestParam("file") MultipartFile[] files) {
         List<ImageResponseDto> response = new ArrayList<>();
-
         Arrays.stream(files).forEach(file -> {
             try {
                 response.add(imageService.createImage(username, file));
