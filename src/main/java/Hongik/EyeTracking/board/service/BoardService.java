@@ -57,6 +57,13 @@ public class BoardService {
         return responses;
     }
 
+    public List<ReadBoardResponseDto> getBoards() {
+        List<ReadBoardResponseDto> responses = new ArrayList<>();
+        boardRepository.findAll().forEach(board -> responses.add(ReadBoardResponseDto.from(board)));
+
+        return responses;
+    }
+
     @Transactional
     public void deleteBoard(Long boardId) {
         if (!boardRepository.existsById(boardId)) {

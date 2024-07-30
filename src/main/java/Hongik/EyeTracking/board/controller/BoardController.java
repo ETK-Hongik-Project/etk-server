@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static Hongik.EyeTracking.common.response.HttpResponse.*;
@@ -37,14 +38,20 @@ public class BoardController {
                 .body(BaseResponse.createSuccess(response));
     }
 
-    @Operation(summary = "키워드로 board 조회")
+    @Operation(summary = "키워드로 board 조회", description = "키워드가 입력되지 않을 시 전체 모든 board 반환")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "board 성공적 조회"),
     })
     @GetMapping("/boards")
-    public ResponseEntity<BaseResponse<List<ReadBoardResponseDto>>> readBoard(@RequestParam("keyword") String keyword) {
-        List<ReadBoardResponseDto> responses = boardService.getBoards(keyword);
+    public ResponseEntity<BaseResponse<List<ReadBoardResponseDto>>> readBoard(@RequestParam(value = "keyword", required = false) String keyword) {
+        List<ReadBoardResponseDto> responses;
+        if (keyword != null) {
+            responses = boardService.getBoards(keyword);
 
+        } else {
+            responses = boardService.getBoards();
+
+        }
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.createSuccess(responses));
     }
@@ -61,6 +68,7 @@ public class BoardController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.createSuccess(response));
     }
+
 
     @Operation(summary = "pk로 board 제거")
     @ApiResponses(value = {
