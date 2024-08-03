@@ -81,7 +81,7 @@ public class PostService {
     }
 
     public List<ReadPostResponseDto> getPostsOfBoard(Long boardId, int pageNo) {
-        if (boardRepository.existsById(boardId)) {
+        if (!boardRepository.existsById(boardId)) {
             throw new NotFoundException(ErrorCode.BOARD_NOT_FOUND);
         }
 
@@ -96,7 +96,7 @@ public class PostService {
     }
 
     public List<ReadPostResponseDto> getPostsOfBoard(Long boardId, int pageNo, String keyword) {
-        if (boardRepository.existsById(boardId)) {
+        if (!boardRepository.existsById(boardId)) {
             throw new NotFoundException(ErrorCode.BOARD_NOT_FOUND);
         }
 
