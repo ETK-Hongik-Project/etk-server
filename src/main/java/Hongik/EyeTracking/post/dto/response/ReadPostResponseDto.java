@@ -25,6 +25,7 @@ public class ReadPostResponseDto {
     public static ReadPostResponseDto from(Post post) {
         ReadPostResponseDto response = new ReadPostResponseDto();
 
+        response.postId = post.getId();
         response.title = post.getTitle();
         response.content = post.getContent();
         response.authorName = post.isAnonymous() || post.getAuthor() == null ? "익명" : post.getAuthor().getUsername();
@@ -36,6 +37,7 @@ public class ReadPostResponseDto {
     public static ReadPostResponseDto of(Post post, String userName) {
         ReadPostResponseDto response = new ReadPostResponseDto();
 
+        response.postId = post.getId();
         response.title = post.getTitle();
         response.content = post.getContent();
         response.authorName = post.isAnonymous()  ? "익명" : userName;
