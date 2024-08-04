@@ -28,6 +28,7 @@ public class ReadCommentResponseDto {
                 .content(comment.getContent())
                 .commenterName(comment.getCommenter().getName())
                 .createdTime(comment.getCreatedDate())
+                .replies(new ArrayList<>())
                 .build();
 
         replies.forEach(reply ->
