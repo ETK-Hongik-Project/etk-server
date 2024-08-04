@@ -28,19 +28,19 @@ public class ReadPostResponseDto {
         response.postId = post.getId();
         response.title = post.getTitle();
         response.content = post.getContent();
-        response.authorName = post.isAnonymous() || post.getAuthor() == null ? "익명" : post.getAuthor().getUsername();
+        response.authorName = post.isAnonymous() || post.getAuthor() == null ? "익명" : post.getAuthor().getName();
         response.createdTime = post.getCreatedDate();
 
         return response;
     }
 
-    public static ReadPostResponseDto of(Post post, String userName) {
+    public static ReadPostResponseDto of(Post post, String authorName) {
         ReadPostResponseDto response = new ReadPostResponseDto();
 
         response.postId = post.getId();
         response.title = post.getTitle();
         response.content = post.getContent();
-        response.authorName = post.isAnonymous()  ? "익명" : userName;
+        response.authorName = post.isAnonymous()  ? "익명" : authorName;
         response.createdTime = post.getCreatedDate();
 
         return response;
