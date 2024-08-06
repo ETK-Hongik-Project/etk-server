@@ -17,7 +17,7 @@ public class ReadReplyResponseDto {
     private String content;
     private String commenterName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     public static ReadReplyResponseDto from(Comment reply) {
