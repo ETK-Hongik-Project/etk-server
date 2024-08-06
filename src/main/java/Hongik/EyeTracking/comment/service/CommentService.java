@@ -89,9 +89,9 @@ public class CommentService {
 
     @Transactional
     public void deleteComment(String username, Long commentId) {
-        User user = userRepository.findByUsername(username).orElseThrow(() ->
-                new NotFoundException(ErrorCode.USER_NOT_FOUND)
-        );
+        if (!userRepository.existsByUsername(username)) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
 
         Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
                 new NotFoundException(ErrorCode.COMMENT_NOT_FOUND)
@@ -101,11 +101,7 @@ public class CommentService {
             throw new BadRequestException(ErrorCode.NOT_USER_COMMENT);
         }
 
-        // 대댓글 연관관계 해제
-        commentRepository.findByParentCommentId(commentId).forEach(reply->{
-            reply.updateParentComment(null);
-        });
-
-        commentRepository.deleteById(commentId);
+        comment.updateCommenter(null);
+        comment.updateContent("삭제된 댓글입니다.");
     }
 }

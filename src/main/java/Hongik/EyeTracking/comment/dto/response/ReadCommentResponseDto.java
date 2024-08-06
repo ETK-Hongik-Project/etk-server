@@ -17,7 +17,7 @@ public class ReadCommentResponseDto {
     private String content;
     private String commenterName;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
 
     List<ReadReplyResponseDto> replies = new ArrayList<>();
@@ -26,7 +26,7 @@ public class ReadCommentResponseDto {
         ReadCommentResponseDto response = ReadCommentResponseDto.builder()
                 .commentId(comment.getId())
                 .content(comment.getContent())
-                .commenterName(comment.getCommenter().getName())
+                .commenterName(comment.getCommenter() != null ? comment.getCommenter().getName() : "(삭제)")
                 .createdTime(comment.getCreatedDate())
                 .replies(new ArrayList<>())
                 .build();

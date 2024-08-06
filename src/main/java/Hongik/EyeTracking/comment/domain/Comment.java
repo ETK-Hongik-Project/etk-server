@@ -52,4 +52,8 @@ public class Comment extends BaseEntity {
     public void updateParentComment(Comment parentComment) {
         this.parentComment = parentComment;
     }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }
