@@ -120,7 +120,7 @@ public class PostService {
                 new NotFoundException(ErrorCode.POST_NOT_FOUND)
         );
 
-        if (post.getAuthor().getUsername().equals(username)) {
+        if (!post.getAuthor().getUsername().equals(username)) {
             throw new BadRequestException(ErrorCode.NOT_USER_POST);
         }
 
