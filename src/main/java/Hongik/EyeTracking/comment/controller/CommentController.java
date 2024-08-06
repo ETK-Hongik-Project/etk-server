@@ -3,6 +3,7 @@ package Hongik.EyeTracking.comment.controller;
 import Hongik.EyeTracking.comment.dto.request.CreateCommentRequestDto;
 import Hongik.EyeTracking.comment.dto.response.CreateCommentResponseDto;
 import Hongik.EyeTracking.comment.dto.response.ReadCommentResponseDto;
+import Hongik.EyeTracking.comment.dto.response.ReadUserCommentResponseDto;
 import Hongik.EyeTracking.comment.service.CommentService;
 import Hongik.EyeTracking.common.response.BaseResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -63,6 +64,18 @@ public class CommentController {
                 .body(BaseResponse.createSuccess(responses));
     }
 
+    @Operation(summary = "post의 모든 comment 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = OK, description = "comment 조회 성공"),
+            @ApiResponse(responseCode = NOT_FOUND, description = "postId를 가지는 post가 존재하지 않는 경우")
+    })
+    @GetMapping("/users/{username}/comments")
+    public ResponseEntity<BaseResponse<List<ReadUserCommentResponseDto>>> readUserComments(@PathVariable("username") String username) {
+        List<ReadUserCommentResponseDto> responses = commentService.readUserComments(username);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(BaseResponse.createSuccess(responses));
+    }
     @Operation(summary = "comment 제거")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "comment 제거"),

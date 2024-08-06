@@ -4,6 +4,7 @@ import Hongik.EyeTracking.comment.domain.Comment;
 import Hongik.EyeTracking.comment.dto.request.CreateCommentRequestDto;
 import Hongik.EyeTracking.comment.dto.response.CreateCommentResponseDto;
 import Hongik.EyeTracking.comment.dto.response.ReadCommentResponseDto;
+import Hongik.EyeTracking.comment.dto.response.ReadUserCommentResponseDto;
 import Hongik.EyeTracking.comment.repository.CommentRepository;
 import Hongik.EyeTracking.common.response.error.ErrorCode;
 import Hongik.EyeTracking.common.response.error.exception.BadRequestException;
@@ -82,6 +83,20 @@ public class CommentService {
             // 대댓글 조회
             List<Comment> replies = commentRepository.findByParentCommentId(comment.getId());
             responses.add(ReadCommentResponseDto.of(comment, replies));
+        });
+
+        return responses;
+    }
+
+    public List<ReadUserCommentResponseDto> readUserComments(String username) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        List<ReadUserCommentResponseDto> responses = new ArrayList<>();
+
+        commentRepository.findByCommenterUsername(username).forEach(comment -> {
+            responses.add(ReadUserCommentResponseDto.from(comment));
         });
 
         return responses;
