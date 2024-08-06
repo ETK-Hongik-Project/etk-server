@@ -76,6 +76,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.createSuccess(responses));
     }
+    
     @Operation(summary = "comment 제거")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "comment 제거"),

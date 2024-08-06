@@ -30,12 +30,16 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String email;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @Builder
-    public User(String username, String password, String name, String email) {
+    public User(String username, String password, String name, String email, Role role) {
         this.username = username;
         this.password = password;
         this.name = name;
         this.email = email;
+        this.role = role;
     }
 
     /**
@@ -51,5 +55,9 @@ public class User extends BaseEntity {
 
     public void updateEmail(String email) {
         this.email = email;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
     }
 }
