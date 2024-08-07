@@ -7,12 +7,14 @@ import Hongik.EyeTracking.common.response.error.exception.NotFoundException;
 import Hongik.EyeTracking.image.domain.Image;
 import Hongik.EyeTracking.image.repository.ImageRepository;
 import Hongik.EyeTracking.post.repository.PostRepository;
+import Hongik.EyeTracking.user.domain.Role;
 import Hongik.EyeTracking.user.domain.User;
 import Hongik.EyeTracking.user.dto.request.CreateUserRequestDto;
 import Hongik.EyeTracking.user.dto.response.CreateUserResponseDto;
 import Hongik.EyeTracking.user.dto.response.ReadUserResponseDto;
 import Hongik.EyeTracking.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +28,7 @@ public class UserService {
     private final ImageRepository imageRepository;
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Transactional
     public CreateUserResponseDto createUser(CreateUserRequestDto requestDto) {
@@ -39,8 +42,9 @@ public class UserService {
         User user = User.builder()
                 .name(requestDto.getName())
                 .username(requestDto.getUsername())
-                .password(requestDto.getPassword())
+                .password(passwordEncoder.encode(requestDto.getPassword()))
                 .email(requestDto.getEmail())
+                .role(Role.USER)
                 .build();
 
         userRepository.save(user);

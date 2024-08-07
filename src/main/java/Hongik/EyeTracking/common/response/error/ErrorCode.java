@@ -16,6 +16,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_MATCH("리프레시 토큰을 확인해주세요"),
     NOT_USER_POST("해당 유저의 게시물이 아닙니다"),
     NOT_USER_COMMENT("유저의 댓글이 아닙니다"),
+    PASSWORD_NOT_MATCH("잘못된 비밀번호입니다"),
 
 
 
@@ -41,9 +42,9 @@ public enum ErrorCode {
 
     /**
      * 405 Method Not Allowed
-
-
-     /**
+     * <p>
+     * <p>
+     * /**
      * 409 Conflict
      */
     USERNAME_ALREADY_EXISTS("이미 사용중인 아이디입니다"),
@@ -53,10 +54,8 @@ public enum ErrorCode {
     /**
      * 500 Internal Server Error
      */
-    DATA_NOT_READY("데이터가 준비되지 않았습니다");
-
-
-
+    DATA_NOT_READY("데이터가 준비되지 않았습니다"),
+    ;
 
 
     private final String message;

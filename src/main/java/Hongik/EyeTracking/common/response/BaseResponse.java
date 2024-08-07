@@ -3,6 +3,7 @@ package Hongik.EyeTracking.common.response;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,6 +30,10 @@ public class BaseResponse<T> {
     // 예외 발생으로 API 호출 실패시 반환
     public static BaseResponse<?> createError(String message) {
         return new BaseResponse<>(ERROR_STATUS, null, message);
+    }
+
+    public static BaseResponse<?> createError(HttpStatus status, String message) {
+        return new BaseResponse<>(status.toString(), null, message);
     }
 
     private BaseResponse(String status, T data, String message) {
