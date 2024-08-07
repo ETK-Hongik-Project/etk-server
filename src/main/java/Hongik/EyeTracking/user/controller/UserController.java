@@ -1,5 +1,6 @@
 package Hongik.EyeTracking.user.controller;
 
+import Hongik.EyeTracking.auth.interfaces.CurrentUserUsername;
 import Hongik.EyeTracking.common.response.BaseResponse;
 import Hongik.EyeTracking.user.domain.User;
 import Hongik.EyeTracking.user.dto.request.CreateUserRequestDto;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import static Hongik.EyeTracking.common.response.HttpResponse.*;
 
 @RestController
-@RequestMapping("api/v1")
+@RequestMapping("/api/v1")
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
@@ -42,8 +43,8 @@ public class UserController {
             @ApiResponse(responseCode = OK, description = "user 성공적 조회"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
-    @GetMapping("/users/{username}")
-    public ResponseEntity<BaseResponse<ReadUserResponseDto>> readUser(@PathVariable("username") String username) {
+    @GetMapping("/user")
+    public ResponseEntity<BaseResponse<ReadUserResponseDto>> readUser(@CurrentUserUsername String username) {
         ReadUserResponseDto response = userService.getUser(username);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -55,8 +56,8 @@ public class UserController {
             @ApiResponse(responseCode = OK, description = "user 성공적 제거"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
-    @DeleteMapping("/users/{username}")
-    public ResponseEntity<BaseResponse> deleteUser(@PathVariable("username") String username) {
+    @DeleteMapping("/user")
+    public ResponseEntity<BaseResponse> deleteUser(@CurrentUserUsername String username) {
         userService.deleteUser(username);
 
         return ResponseEntity.status(HttpStatus.OK)

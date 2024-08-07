@@ -27,13 +27,13 @@ public class AuthController {
     @PostMapping("/login")
     @Operation(summary = "username, password 기반 로그인")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "로그인 성공"),
+            @ApiResponse(responseCode = "200", description = "로그인 성공"),
             @ApiResponse(responseCode = "400", description = "아이디 or 비밀번호 틀림"),
     })
     public ResponseEntity<BaseResponse> login(@RequestBody @Valid LogInRequestDto requestDto) {
         TokenResponseWithUserUsernameDto response = authService.login(requestDto);
 
-        return ResponseEntity.status(HttpStatus.CREATED)
+        return ResponseEntity.status(HttpStatus.OK)
                 .header(accessTokenHeader, response.getAccessToken())
                 .header(refreshTokenHeader, response.getRefreshToken())
                 .body(BaseResponse.createSuccess("로그인 성공"));

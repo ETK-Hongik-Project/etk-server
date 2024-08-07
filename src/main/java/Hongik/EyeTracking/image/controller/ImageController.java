@@ -1,5 +1,6 @@
 package Hongik.EyeTracking.image.controller;
 
+import Hongik.EyeTracking.auth.interfaces.CurrentUserUsername;
 import Hongik.EyeTracking.common.response.BaseResponse;
 import Hongik.EyeTracking.image.dto.ImageResponseDto;
 import Hongik.EyeTracking.image.service.ImageService;
@@ -28,14 +29,14 @@ import static Hongik.EyeTracking.common.response.HttpResponse.*;
 public class ImageController {
     private final ImageService imageService;
 
-    @Operation(summary = "이미지 저장")
+    @Operation(summary = "로그인 한 유저의 이미지 저장")
     @ApiResponses(value = {
             @ApiResponse(responseCode = CREATED, description = "이미지 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
-    @PostMapping(value = "/users/{username}/images", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/images", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     // swagger 사용하려면 @RequestParam("file")에서 @ModelAttribute("file")로 변경해야함
-    public ResponseEntity<BaseResponse> uploadImage(@PathVariable("username") String username, @RequestParam("file") MultipartFile[] files) {
+    public ResponseEntity<BaseResponse> uploadImage(@CurrentUserUsername String username, @RequestParam("file") MultipartFile[] files) {
         List<ImageResponseDto> response = new ArrayList<>();
         Arrays.stream(files).forEach(file -> {
             try {
@@ -48,37 +49,37 @@ public class ImageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponse.createSuccess(response));
     }
 
-    @Operation(summary = "모든 이미지 제거")
+    @Operation(summary = "로그인 한 유저의 모든 이미지 제거")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "이미지 제거 성공"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
-    @DeleteMapping("/users/{username}/images")
-    public ResponseEntity<BaseResponse> deleteImage(@PathVariable("username") String username) {
+    @DeleteMapping("/images")
+    public ResponseEntity<BaseResponse> deleteImage(@CurrentUserUsername String username) {
         imageService.deleteImages(username);
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
-    @Operation(summary = "모든 이미지 조회")
+    @Operation(summary = "로그인 한 유저의 모든 이미지 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "이미지 조회 성공"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
-    @GetMapping("/users/{username}/images")
-    public ResponseEntity<BaseResponse<List<ImageResponseDto>>> readImages(@PathVariable("username") String username) {
+    @GetMapping("/images")
+    public ResponseEntity<BaseResponse<List<ImageResponseDto>>> readImages(@CurrentUserUsername String username) {
         List<ImageResponseDto> response = imageService.getImages(username);
 
         return ResponseEntity.status(HttpStatus.OK).body(BaseResponse.createSuccess(response));
     }
 
-    @Operation(summary = "특정 이미지 조회")
+    @Operation(summary = "로그인 한 유저의 특정 이미지 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "이미지 조회 성공"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
     })
-    @GetMapping(value = "/users/{username}/images/{image_id}", produces = MediaType.IMAGE_JPEG_VALUE)
-    public ResponseEntity<byte[]> readImage(@PathVariable("username") String username, @PathVariable("image_id") Long imageId) {
+    @GetMapping(value = "/images/{image_id}", produces = MediaType.IMAGE_JPEG_VALUE)
+    public ResponseEntity<byte[]> readImage(@CurrentUserUsername String username, @PathVariable("image_id") Long imageId) {
         try {
             byte[] response = imageService.getImage(username, imageId);
 

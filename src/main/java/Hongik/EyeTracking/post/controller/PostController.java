@@ -1,5 +1,6 @@
 package Hongik.EyeTracking.post.controller;
 
+import Hongik.EyeTracking.auth.interfaces.CurrentUserUsername;
 import Hongik.EyeTracking.board.dto.response.ReadBoardResponseDto;
 import Hongik.EyeTracking.board.service.BoardService;
 import Hongik.EyeTracking.common.response.BaseResponse;
@@ -35,8 +36,8 @@ public class PostController {
             @ApiResponse(responseCode = CREATED, description = "post 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, boardId를 가지는 board가 존재하지 않는 경우")
     })
-    @PostMapping("/users/{username}/boards/{boardId}/posts")
-    public ResponseEntity<BaseResponse<CreatePostResponseDto>> createPost(@PathVariable("username") String username, @PathVariable("boardId") Long boardId,
+    @PostMapping("/boards/{boardId}/posts")
+    public ResponseEntity<BaseResponse<CreatePostResponseDto>> createPost(@CurrentUserUsername String username, @PathVariable("boardId") Long boardId,
                                                                           @Valid @RequestBody CreatePostRequestDto requestDto) {
         CreatePostResponseDto response = postService.createPost(username, boardId, requestDto);
 
@@ -76,27 +77,27 @@ public class PostController {
         }
     }
 
-    @Operation(summary = "user의 post 조회")
+    @Operation(summary = "로그인 한 유저의 post들 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "post 성공적 조회"),
             @ApiResponse(responseCode = NOT_FOUND, description = "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우")
     })
-    @GetMapping("/users/{username}/posts")
-    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readPostsOfUser(@PathVariable("username") String username, @RequestParam("pageNo") int pageNo) {
+    @GetMapping("/posts")
+    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readPostsOfUser(@CurrentUserUsername String username, @RequestParam("pageNo") int pageNo) {
         List<ReadPostResponseDto> responses = postService.getPostsOfUser(username, pageNo);
 
         return ResponseEntity.status(HttpStatus.OK)
                     .body(BaseResponse.createSuccess(responses));
     }
 
-    @Operation(summary = "post 수정")
+    @Operation(summary = "로그인 한 유저의 post 수정")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "post 성공적 수정"),
             @ApiResponse(responseCode = NOT_FOUND, description = "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우"),
             @ApiResponse(responseCode = BAD_REQUEST, description = "user의 post가 아닌 경우")
     })
-    @PostMapping("/users/{username}/posts/{postId}")
-    public ResponseEntity<BaseResponse<ModifyPostResponseDto>> modifyPost(@PathVariable("username") String username, @PathVariable("postId") Long postId,
+    @PostMapping("/posts/{postId}")
+    public ResponseEntity<BaseResponse<ModifyPostResponseDto>> modifyPost(@CurrentUserUsername String username, @PathVariable("postId") Long postId,
                                                                           @Valid @RequestBody ModifyPostRequestDto requestDto) {
         ModifyPostResponseDto response = postService.updatePost(username, postId, requestDto);
 
@@ -104,14 +105,14 @@ public class PostController {
                 .body(BaseResponse.createSuccess(response));
     }
 
-    @Operation(summary = "post 제거")
+    @Operation(summary = "로그인 한 유저의 post 제거")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "post 성공적 제거"),
             @ApiResponse(responseCode = NOT_FOUND, description = "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우"),
             @ApiResponse(responseCode = BAD_REQUEST, description = "user의 post가 아닌 경우")
     })
-    @DeleteMapping("/users/{username}/posts/{postId}")
-    public ResponseEntity<BaseResponse> deletePost(@PathVariable("username") String username, @PathVariable("postId") Long postId) {
+    @DeleteMapping("/posts/{postId}")
+    public ResponseEntity<BaseResponse> deletePost(@CurrentUserUsername String username, @PathVariable("postId") Long postId) {
         postService.deletePost(username, postId);
 
         return ResponseEntity.status(HttpStatus.OK)

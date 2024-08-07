@@ -1,5 +1,6 @@
 package Hongik.EyeTracking.comment.controller;
 
+import Hongik.EyeTracking.auth.interfaces.CurrentUserUsername;
 import Hongik.EyeTracking.comment.dto.request.CreateCommentRequestDto;
 import Hongik.EyeTracking.comment.dto.response.CreateCommentResponseDto;
 import Hongik.EyeTracking.comment.dto.response.ReadCommentResponseDto;
@@ -25,26 +26,26 @@ import static Hongik.EyeTracking.common.response.HttpResponse.*;
 public class CommentController {
     private final CommentService commentService;
 
-    @Operation(summary = "post에 comment 생성")
+    @Operation(summary = "post에 comment 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = CREATED, description = "comment 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우")
     })
-    @PostMapping("/user/{username}/posts/{postId}/comments")
-    public ResponseEntity<BaseResponse<CreateCommentResponseDto>> createComment(@PathVariable("username") String username, @PathVariable("postId") Long postId, @Valid @RequestBody CreateCommentRequestDto requestDto) {
+    @PostMapping("/posts/{postId}/comments")
+    public ResponseEntity<BaseResponse<CreateCommentResponseDto>> createComment(@CurrentUserUsername String username, @PathVariable("postId") Long postId, @Valid @RequestBody CreateCommentRequestDto requestDto) {
         CreateCommentResponseDto response = commentService.createComment(username, postId, requestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(BaseResponse.createSuccess(response));
     }
 
-    @Operation(summary = "comment에 reply 생성")
+    @Operation(summary = "comment에 reply 등록")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "reply 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우")
     })
-    @PostMapping("/user/{username}/comments/{commentId}")
-    public ResponseEntity<BaseResponse<CreateCommentResponseDto>> createReply(@PathVariable("username") String username, @PathVariable("commentId") Long commentId, @Valid @RequestBody CreateCommentRequestDto requestDto) {
+    @PostMapping("/comments/{commentId}")
+    public ResponseEntity<BaseResponse<CreateCommentResponseDto>> createReply(@CurrentUserUsername String username, @PathVariable("commentId") Long commentId, @Valid @RequestBody CreateCommentRequestDto requestDto) {
         CreateCommentResponseDto response = commentService.createReply(username, commentId, requestDto);
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -64,27 +65,27 @@ public class CommentController {
                 .body(BaseResponse.createSuccess(responses));
     }
 
-    @Operation(summary = "post의 모든 comment 조회")
+    @Operation(summary = "로그인 한 유저의 모든 comment 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "comment 조회 성공"),
             @ApiResponse(responseCode = NOT_FOUND, description = "postId를 가지는 post가 존재하지 않는 경우")
     })
-    @GetMapping("/users/{username}/comments")
-    public ResponseEntity<BaseResponse<List<ReadUserCommentResponseDto>>> readUserComments(@PathVariable("username") String username) {
+    @GetMapping("/comments")
+    public ResponseEntity<BaseResponse<List<ReadUserCommentResponseDto>>> readUserComments(@CurrentUserUsername String username) {
         List<ReadUserCommentResponseDto> responses = commentService.readUserComments(username);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.createSuccess(responses));
     }
     
-    @Operation(summary = "comment 제거")
+    @Operation(summary = "로그인 한 유저의 comment 제거")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "comment 제거"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우"),
             @ApiResponse(responseCode = BAD_REQUEST, description = "유저의 comment가 아닌 경우")
     })
-    @DeleteMapping("users/{username}/comments/{commentId}")
-    public ResponseEntity<BaseResponse> deleteComment(@PathVariable("username") String username, @PathVariable("commentId") Long commentId) {
+    @DeleteMapping("/comments/{commentId}")
+    public ResponseEntity<BaseResponse> deleteComment(@CurrentUserUsername String username, @PathVariable("commentId") Long commentId) {
         commentService.deleteComment(username, commentId);
 
         return ResponseEntity.status(HttpStatus.OK)
