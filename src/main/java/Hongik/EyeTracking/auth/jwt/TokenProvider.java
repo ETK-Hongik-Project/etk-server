@@ -37,8 +37,8 @@ public class TokenProvider implements InitializingBean {
                          @Value("${jwt.validationTime}") Long validationTime,
                          CustomUserDetailsService customUserDetailsService) {
         this.secret = secret;
-        this.validationTime = validationTime * 1000;
-        this.refreshTokenValidationTime = validationTime * 24 * 7 * 1000;
+        this.validationTime = validationTime * 60000;
+        this.refreshTokenValidationTime = validationTime * 24 * 7 * 60000;
         this.customUserDetailsService = customUserDetailsService;
     }
 
