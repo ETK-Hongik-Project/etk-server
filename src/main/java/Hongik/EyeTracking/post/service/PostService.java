@@ -66,44 +66,56 @@ public class PostService {
         return ReadPostResponseDto.from(post);
     }
 
-    public List<ReadPostResponseDto> getPostsOfUser(String username, int pageNo) {
+    public List<ReadPostResponseDto> getPostsOfUser(String username) {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new NotFoundException(ErrorCode.USER_NOT_FOUND)
         );
 
         List<ReadPostResponseDto> responses = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, Sort.Direction.DESC, "createdDate");
-        postRepository.findByAuthorId(user.getId(), pageable)
+        postRepository.findByAuthorIdOrderByCreatedDateDesc(user.getId())
                 .forEach(post -> responses.add(ReadPostResponseDto.of(post, user.getName())));
 
         return responses;
     }
 
-    public List<ReadPostResponseDto> getPostsOfBoard(Long boardId, int pageNo) {
+    public List<ReadPostResponseDto> getCommentedPostsOfUser(String username) {
+        if (!userRepository.existsByUsername(username)) {
+            throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
+        }
+
+        List<ReadPostResponseDto> responses = new ArrayList<>();
+
+        postRepository.findPostThatUserComments(username)
+                .forEach(post -> {
+                    responses.add(ReadPostResponseDto.from(post));
+                });
+
+        return responses;
+    }
+
+    public List<ReadPostResponseDto> getPostsOfBoard(Long boardId) {
         if (!boardRepository.existsById(boardId)) {
             throw new NotFoundException(ErrorCode.BOARD_NOT_FOUND);
         }
 
         List<ReadPostResponseDto> responses = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, Sort.Direction.DESC, "createdDate");
-        postRepository.findByBoardId(boardId, pageable).forEach(post ->
+        postRepository.findByBoardIdOrderByCreatedDateDesc(boardId).forEach(post ->
                 responses.add(ReadPostResponseDto.from(post))
         );
 
         return responses;
     }
 
-    public List<ReadPostResponseDto> getPostsOfBoard(Long boardId, int pageNo, String keyword) {
+    public List<ReadPostResponseDto> getPostsOfBoard(Long boardId, String keyword) {
         if (!boardRepository.existsById(boardId)) {
             throw new NotFoundException(ErrorCode.BOARD_NOT_FOUND);
         }
 
         List<ReadPostResponseDto> responses = new ArrayList<>();
 
-        Pageable pageable = PageRequest.of(pageNo, PAGE_SIZE, Sort.Direction.DESC, "createdDate");
-        postRepository.findByBoardIdAndKeyword(boardId, keyword, pageable).forEach(post ->
+        postRepository.findByBoardIdAndKeyword(boardId, keyword).forEach(post ->
                 responses.add(ReadPostResponseDto.from(post))
         );
 

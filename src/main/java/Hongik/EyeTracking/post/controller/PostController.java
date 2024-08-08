@@ -64,14 +64,13 @@ public class PostController {
             @ApiResponse(responseCode = NOT_FOUND, description = "boardId를 가지는 board가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우")
     })
     @GetMapping("/boards/{boardId}/posts")
-    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readPostsOfBoard(@PathVariable("boardId") Long boardId, @RequestParam(value = "keyword", required = false) String keyword,
-                                                                                    @RequestParam("pageNo") int pageNo) {
+    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readPostsOfBoard(@PathVariable("boardId") Long boardId, @RequestParam(value = "keyword", required = false) String keyword) {
         if (keyword == null) {
-            List<ReadPostResponseDto> responses = postService.getPostsOfBoard(boardId, pageNo);
+            List<ReadPostResponseDto> responses = postService.getPostsOfBoard(boardId);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(BaseResponse.createSuccess(responses));
         } else {
-            List<ReadPostResponseDto> responses = postService.getPostsOfBoard(boardId, pageNo, keyword);
+            List<ReadPostResponseDto> responses = postService.getPostsOfBoard(boardId, keyword);
             return ResponseEntity.status(HttpStatus.OK)
                     .body(BaseResponse.createSuccess(responses));
         }
@@ -83,11 +82,11 @@ public class PostController {
             @ApiResponse(responseCode = NOT_FOUND, description = "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우")
     })
     @GetMapping("/posts")
-    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readPostsOfUser(@CurrentUserUsername String username, @RequestParam("pageNo") int pageNo) {
-        List<ReadPostResponseDto> responses = postService.getPostsOfUser(username, pageNo);
+    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readPostsOfUser(@CurrentUserUsername String username) {
+        List<ReadPostResponseDto> responses = postService.getPostsOfUser(username);
 
         return ResponseEntity.status(HttpStatus.OK)
-                    .body(BaseResponse.createSuccess(responses));
+                .body(BaseResponse.createSuccess(responses));
     }
 
     @Operation(summary = "로그인 한 유저의 post 수정")
@@ -103,6 +102,19 @@ public class PostController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.createSuccess(response));
+    }
+
+    @Operation(summary = "로그인 한 유저가 댓글을 단 post 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = OK, description = "post 성공적 조회"),
+            @ApiResponse(responseCode = NOT_FOUND, description = "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우"),
+    })
+    @GetMapping("/commented-posts")
+    public ResponseEntity<BaseResponse<List<ReadPostResponseDto>>> readCommentedPosts(@CurrentUserUsername String username) {
+        List<ReadPostResponseDto> responses = postService.getCommentedPostsOfUser(username);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(BaseResponse.createSuccess(responses));
     }
 
     @Operation(summary = "로그인 한 유저의 post 제거")
