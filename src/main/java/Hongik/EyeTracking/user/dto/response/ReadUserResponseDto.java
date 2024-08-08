@@ -12,10 +12,9 @@ public class ReadUserResponseDto {
     private Long id;
     private String name;
     private String username;
-    private String password;
     private String email;
 
     public static ReadUserResponseDto from(User user) {
-        return new ReadUserResponseDto(user.getId(), user.getName(), user.getUsername(), user.getPassword(), user.getEmail());
+        return new ReadUserResponseDto(user.getId(), user.getName(), user.getUsername(), user.getEmail());
     }
 }
