@@ -41,7 +41,7 @@ public class CommentController {
 
     @Operation(summary = "comment에 reply 등록")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = OK, description = "reply 성공적 추가"),
+            @ApiResponse(responseCode = CREATED, description = "reply 성공적 추가"),
             @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우")
     })
     @PostMapping("/comments/{commentId}")
