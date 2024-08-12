@@ -58,11 +58,24 @@ public class CommentController {
             @ApiResponse(responseCode = NOT_FOUND, description = "postId를 가지는 post가 존재하지 않는 경우")
     })
     @GetMapping("/posts/{postId}/comments")
-    public ResponseEntity<BaseResponse<List<ReadCommentResponseDto>>> readComment(@PathVariable("postId") Long postId) {
+    public ResponseEntity<BaseResponse<List<ReadCommentResponseDto>>> readComments(@PathVariable("postId") Long postId) {
         List<ReadCommentResponseDto> responses = commentService.readCommentsOfPost(postId);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(BaseResponse.createSuccess(responses));
+    }
+
+    @Operation(summary = "특정 comment 조회")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = OK, description = "comment 조회 성공"),
+            @ApiResponse(responseCode = NOT_FOUND, description = "commentId를 가지는 comment가 존재하지 않는 경우")
+    })
+    @GetMapping("/comments/{commentId}")
+    public ResponseEntity<BaseResponse<ReadCommentResponseDto>> readComment(@PathVariable("commentId") Long commentId) {
+        ReadCommentResponseDto response = commentService.readComment(commentId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(BaseResponse.createSuccess(response));
     }
 
     @Operation(summary = "로그인 한 유저의 모든 comment 조회")

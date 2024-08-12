@@ -88,6 +88,15 @@ public class CommentService {
         return responses;
     }
 
+    public ReadCommentResponseDto readComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() ->
+                new NotFoundException(ErrorCode.COMMENT_NOT_FOUND)
+        );
+        List<Comment> replies = commentRepository.findByParentCommentId(comment.getId());
+
+        return ReadCommentResponseDto.of(comment, replies);
+    }
+
     public List<ReadUserCommentResponseDto> readUserComments(String username) {
         if (!userRepository.existsByUsername(username)) {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
