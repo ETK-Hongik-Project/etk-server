@@ -1,12 +1,10 @@
 package Hongik.EyeTracking.comment.dto.response;
 
 import Hongik.EyeTracking.comment.domain.Comment;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadUserCommentResponseDto {
@@ -15,12 +13,15 @@ public class ReadUserCommentResponseDto {
 
     private String content;
     private String commenterName;
+    private Boolean isDeleted;
 
     public static ReadUserCommentResponseDto from(Comment comment) {
-        return new ReadUserCommentResponseDto(
-                comment.getPost().getTitle(),
-                comment.getPost().getContent(),
-                comment.getContent(),
-                comment.getCommenter().getName());
+        return ReadUserCommentResponseDto.builder()
+                .postTitle(comment.getPost().getTitle())
+                .postContent(comment.getPost().getContent())
+                .content(comment.getContent())
+                .commenterName(comment.getCommenter().getName())
+                .isDeleted(comment.isDeleted())
+                .build();
     }
 }

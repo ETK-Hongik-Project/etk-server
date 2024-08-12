@@ -16,6 +16,7 @@ public class ReadCommentResponseDto {
     private Long commentId;
     private String content;
     private String commenterName;
+    private Boolean isDeleted;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yy-MM-dd HH:mm", timezone = "Asia/Seoul")
     private LocalDateTime createdTime;
@@ -28,6 +29,7 @@ public class ReadCommentResponseDto {
                 .content(comment.getContent())
                 .commenterName(comment.getCommenter() != null ? comment.getCommenter().getName() : "(삭제)")
                 .createdTime(comment.getCreatedDate())
+                .isDeleted(comment.isDeleted())
                 .replies(new ArrayList<>())
                 .build();
 
@@ -44,6 +46,7 @@ public class ReadCommentResponseDto {
                 .content(comment.getContent())
                 .commenterName(comment.getCommenter() != null ? comment.getCommenter().getName() : "(삭제)")
                 .createdTime(comment.getCreatedDate())
+                .isDeleted(comment.isDeleted())
                 .replies(new ArrayList<>())
                 .build();
 
