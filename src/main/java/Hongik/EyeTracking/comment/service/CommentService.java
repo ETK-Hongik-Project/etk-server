@@ -127,6 +127,7 @@ public class CommentService {
 
         comment.updateCommenter(null);
         comment.updateContent("삭제된 댓글입니다.");
+        comment.updateDeleted(true);
 
         return ReadCommentResponseDto.from(comment);
     }

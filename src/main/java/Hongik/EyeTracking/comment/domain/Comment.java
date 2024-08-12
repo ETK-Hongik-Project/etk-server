@@ -24,6 +24,9 @@ public class Comment extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String content;
 
+    @Column(nullable = false, name = "is_deleted")
+    private boolean isDeleted;
+
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User commenter;
@@ -42,6 +45,7 @@ public class Comment extends BaseEntity {
         this.commenter = commenter;
         this.post = post;
         this.parentComment = parentComment;
+        isDeleted = false;
     }
 
     // 연관관계 제거
@@ -55,5 +59,9 @@ public class Comment extends BaseEntity {
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void updateDeleted(boolean isDeleted) {
+        this.isDeleted = isDeleted;
     }
 }
