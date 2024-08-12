@@ -37,4 +37,16 @@ public class ReadCommentResponseDto {
 
         return response;
     }
+
+    public static ReadCommentResponseDto from(Comment comment) {
+        ReadCommentResponseDto response = ReadCommentResponseDto.builder()
+                .commentId(comment.getId())
+                .content(comment.getContent())
+                .commenterName(comment.getCommenter() != null ? comment.getCommenter().getName() : "(삭제)")
+                .createdTime(comment.getCreatedDate())
+                .replies(new ArrayList<>())
+                .build();
+
+        return response;
+    }
 }

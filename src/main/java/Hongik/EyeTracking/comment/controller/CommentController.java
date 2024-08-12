@@ -98,10 +98,10 @@ public class CommentController {
             @ApiResponse(responseCode = BAD_REQUEST, description = "유저의 comment가 아닌 경우")
     })
     @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<BaseResponse> deleteComment(@CurrentUserUsername String username, @PathVariable("commentId") Long commentId) {
-        commentService.deleteComment(username, commentId);
+    public ResponseEntity<BaseResponse<ReadCommentResponseDto>> deleteComment(@CurrentUserUsername String username, @PathVariable("commentId") Long commentId) {
+        ReadCommentResponseDto response = commentService.deleteComment(username, commentId);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(BaseResponse.createSuccessWithNoContent());
+                .body(BaseResponse.createSuccess(response));
     }
 }

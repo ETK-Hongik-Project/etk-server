@@ -112,7 +112,7 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(String username, Long commentId) {
+    public ReadCommentResponseDto deleteComment(String username, Long commentId) {
         if (!userRepository.existsByUsername(username)) {
             throw new NotFoundException(ErrorCode.USER_NOT_FOUND);
         }
@@ -127,5 +127,7 @@ public class CommentService {
 
         comment.updateCommenter(null);
         comment.updateContent("삭제된 댓글입니다.");
+
+        return ReadCommentResponseDto.from(comment);
     }
 }
