@@ -5,6 +5,8 @@ import Hongik.EyeTracking.post.domain.Post;
 import Hongik.EyeTracking.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -14,6 +16,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Entity
 @NoArgsConstructor(access = PROTECTED)
 @AllArgsConstructor(access = PROTECTED)
+@DynamicInsert
 @ToString(exclude = {"commenter", "post", "parentComment"})
 public class Comment extends BaseEntity {
     @Id
@@ -25,6 +28,7 @@ public class Comment extends BaseEntity {
     private String content;
 
     @Column(nullable = false, name = "is_deleted")
+    @ColumnDefault(value = "false")
     private boolean isDeleted;
 
     @ManyToOne(fetch = LAZY)
@@ -45,7 +49,7 @@ public class Comment extends BaseEntity {
         this.commenter = commenter;
         this.post = post;
         this.parentComment = parentComment;
-        isDeleted = false;
+//        this.isDeleted = false;
     }
 
     // 연관관계 제거
