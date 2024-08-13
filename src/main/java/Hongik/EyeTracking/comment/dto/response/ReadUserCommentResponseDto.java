@@ -20,7 +20,7 @@ public class ReadUserCommentResponseDto {
                 .postTitle(comment.getPost().getTitle())
                 .postContent(comment.getPost().getContent())
                 .content(comment.getContent())
-                .commenterName(comment.getCommenter().getName())
+                .commenterName(comment.getCommenter() != null ? comment.getCommenter().getName() : "(삭제)")
                 .isDeleted(comment.isDeleted())
                 .build();
     }
