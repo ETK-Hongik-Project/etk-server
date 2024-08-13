@@ -24,7 +24,7 @@ public class ReadReplyResponseDto {
         return ReadReplyResponseDto.builder()
                 .commentId(reply.getId())
                 .content(reply.getContent())
-                .commenterName(reply.getCommenter().getName())
+                .commenterName(reply.getCommenter() != null ? reply.getCommenter().getName() : "(삭제)")
                 .createdTime(reply.getCreatedDate())
                 .isDeleted(reply.isDeleted())
                 .build();
