@@ -48,7 +48,7 @@ public class CommentController {
     public ResponseEntity<BaseResponse<CreateCommentResponseDto>> createReply(@CurrentUserUsername String username, @PathVariable("commentId") Long commentId, @Valid @RequestBody CreateCommentRequestDto requestDto) {
         CreateCommentResponseDto response = commentService.createReply(username, commentId, requestDto);
 
-        return ResponseEntity.status(HttpStatus.OK)
+        return ResponseEntity.status(HttpStatus.CREATED)
                 .body(BaseResponse.createSuccess(response));
     }
 
