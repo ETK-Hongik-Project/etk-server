@@ -36,7 +36,7 @@ public class ImageController {
     })
     @PostMapping(value = "/images", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     // swagger 사용하려면 @RequestParam("file")에서 @ModelAttribute("file")로 변경해야함
-    public ResponseEntity<BaseResponse> uploadImage(@CurrentUserUsername String username, @ModelAttribute("file") MultipartFile[] files) {
+    public ResponseEntity<BaseResponse> uploadImage(@CurrentUserUsername String username, @RequestParam("file") MultipartFile[] files) {
         List<ImageResponseDto> response = new ArrayList<>();
         Arrays.stream(files).forEach(file -> {
             try {
