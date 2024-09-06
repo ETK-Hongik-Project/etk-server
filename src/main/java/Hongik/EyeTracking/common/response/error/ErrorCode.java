@@ -38,6 +38,7 @@ public enum ErrorCode {
     BOARD_NOT_FOUND("존재하지 않는 게시판입니다"),
     POST_NOT_FOUND("존재하지 않는 게시물입니다"),
     COMMENT_NOT_FOUND("존재하지 않는 댓글입니다"),
+    WEIGHT_NOT_FOUND("가중치가 존재하지 않습니다"),
 
 
     /**
