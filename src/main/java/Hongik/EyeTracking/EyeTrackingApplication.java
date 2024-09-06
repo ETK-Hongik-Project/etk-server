@@ -13,14 +13,22 @@ import java.util.TimeZone;
 @EnableJpaAuditing
 public class EyeTrackingApplication {
 
-    @Value("${upload.directory}")
-    private String uploadDirectory;
+    @Value("${upload.directory.image}")
+    private String imageUploadDirectory;
+
+    @Value("${upload.directory.weight}")
+    private String weightUploadDirectory;
 
     @PostConstruct
     public void init() {
-        File directory = new File(uploadDirectory);
-        if (!directory.exists()) {
-            directory.mkdirs(); // 디렉터리 생성
+        File imageDirectory = new File(imageUploadDirectory);
+        if (!imageDirectory.exists()) {
+            imageDirectory.mkdirs(); // 디렉터리 생성
+        }
+
+        File weightDirectory = new File(weightUploadDirectory);
+        if (!weightDirectory.exists()) {
+            weightDirectory.mkdirs(); // 디렉터리 생성
         }
     }
 
