@@ -36,7 +36,7 @@ public class ImageService {
     private final UserRepository userRepository;
 
     // 폴더 경로
-    @Value("${upload.directory}")
+    @Value("${upload.directory.image}")
     private String uploadDir;
 
     @Transactional
