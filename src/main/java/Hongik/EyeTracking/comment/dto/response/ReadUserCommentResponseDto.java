@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class ReadUserCommentResponseDto {
+    private Long commentId;
     private String postTitle;
     private String postContent;
 
@@ -17,6 +18,7 @@ public class ReadUserCommentResponseDto {
 
     public static ReadUserCommentResponseDto from(Comment comment) {
         return ReadUserCommentResponseDto.builder()
+                .commentId(comment.getId())
                 .postTitle(comment.getPost().getTitle())
                 .postContent(comment.getPost().getContent())
                 .content(comment.getContent())
@@ -24,4 +26,5 @@ public class ReadUserCommentResponseDto {
                 .isDeleted(comment.isDeleted())
                 .build();
     }
+
 }
