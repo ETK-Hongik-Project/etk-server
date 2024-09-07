@@ -1,6 +1,7 @@
 package Hongik.EyeTracking.weight.service;
 
 import Hongik.EyeTracking.common.response.error.ErrorCode;
+import Hongik.EyeTracking.common.response.error.exception.DuplicateException;
 import Hongik.EyeTracking.common.response.error.exception.NotFoundException;
 import Hongik.EyeTracking.image.domain.Image;
 import Hongik.EyeTracking.image.dto.ImageResponseDto;
@@ -38,6 +39,9 @@ public class WeightService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new NotFoundException(ErrorCode.USER_NOT_FOUND)
         );
+        // 한 user당 가중치는 하나밖에 가질 수 없음.
+        weightRepository.findByUserId(user.getId())
+                .ifPresent(weight -> new DuplicateException(ErrorCode.WEIGHT_ALREADY_EXISTS));
 
         if (file.isEmpty()) {
             throw new IOException("Failed to store empty file.");
@@ -92,5 +96,23 @@ public class WeightService {
             throw new RuntimeException(e);
         }
         weightRepository.delete(weight);
+    }
+
+    @Transactional
+    public void deleteWeightIfExists(String username) throws IOException {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        weightRepository.findByUserId(user.getId())
+                .ifPresent(weight -> {
+                    try {
+                        Path path = Paths.get(weight.getFilePath());
+                        Files.deleteIfExists(path);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    weightRepository.delete(weight);
+                });
     }
 }

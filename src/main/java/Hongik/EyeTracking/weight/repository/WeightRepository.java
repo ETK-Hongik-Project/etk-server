@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface WeightRepository extends JpaRepository<Weight, Long> {
     Optional<Weight> findByUserId(Long userId);
+
+    boolean existsByUserId(Long userId);
 }
