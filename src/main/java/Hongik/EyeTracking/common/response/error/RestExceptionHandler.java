@@ -5,6 +5,8 @@ import Hongik.EyeTracking.common.response.BaseResponse;
 import Hongik.EyeTracking.common.response.error.exception.*;
 import jakarta.servlet.http.HttpServletRequest;
 
+import java.io.IOError;
+import java.io.IOException;
 import java.lang.InterruptedException;
 import java.time.format.DateTimeParseException;
 import lombok.extern.slf4j.Slf4j;
@@ -143,8 +145,16 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(BaseResponse.createError(DATE_TIME_FORMAT));
     }
 
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<BaseResponse<?>> handleIOException(IOException exception,HttpServletRequest request) {
+        logInfo(request, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(BaseResponse.createError(exception.getMessage()));
+    }
+
 
     private void logInfo(HttpServletRequest request, String message) {
+
         log.info("{} {} : {} (traceId: {})",
                 request.getMethod(), request.getRequestURI(), message, getTraceId());
     }
