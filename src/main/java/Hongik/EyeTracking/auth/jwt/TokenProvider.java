@@ -38,7 +38,7 @@ public class TokenProvider implements InitializingBean {
                          CustomUserDetailsService customUserDetailsService) {
         this.secret = secret;
         this.validationTime = validationTime * 60000 * 60;  // accessToken 만료: validationTime 시간
-        this.refreshTokenValidationTime = validationTime * 24 * 7 * 60000;
+        this.refreshTokenValidationTime = validationTime * 60000 * 60 * 7;
         this.customUserDetailsService = customUserDetailsService;
     }
 
