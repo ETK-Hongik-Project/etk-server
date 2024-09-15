@@ -5,4 +5,5 @@ public class HttpResponse {
     public static final String CREATED = "201";
     public static final String BAD_REQUEST = "400";
     public static final String NOT_FOUND = "404";
+    public static final String CONFLICT = "409";
 }

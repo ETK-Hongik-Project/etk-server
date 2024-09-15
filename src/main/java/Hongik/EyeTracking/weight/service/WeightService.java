@@ -13,9 +13,11 @@ import Hongik.EyeTracking.weight.repository.WeightRepository;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -65,6 +67,7 @@ public class WeightService {
         return WeightResponseDto.from(weightRepository.save(weight));
     }
 
+    @Transactional
     public byte[] getWeight(String username) throws IOException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
@@ -72,10 +75,18 @@ public class WeightService {
         Weight weight = weightRepository.findByUserId(user.getId()).orElseThrow(() ->
                 new NotFoundException(ErrorCode.WEIGHT_NOT_FOUND));
 
+        // 이미 가중치가 업데이트 된 경우 업데이트 불가
+        if (weight.getIsUpdated()) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 업데이트 된 가중치입니다.");
+        }
+
         FileInputStream weightInputStream = new FileInputStream(weight.getFilePath());
 
         byte[] weightByteArray = IOUtils.toByteArray(weightInputStream);
         weightInputStream.close();
+
+        // 업데이트 여부 true 설정
+        weight.updateIsUpdated(true);
 
         return weightByteArray;
     }

@@ -52,6 +52,7 @@ public enum ErrorCode {
     EMAIL_ALREADY_EXISTS("이미 사용중인 이메일입니다"),
     BOARD_ALREADY_EXISTS("이미 존재하는 게시판입니다"),
     WEIGHT_ALREADY_EXISTS("이미 가중치가 존재합니다"),
+    WEIGHT_ALREADY_UPDATED("이미 가중치가 업데이트 되었습니다."),
 
     /**
      * 500 Internal Server Error

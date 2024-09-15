@@ -57,7 +57,8 @@ public class WeightController {
     @Operation(summary = "로그인 한 유저의 가중치 조회")
     @ApiResponses(value = {
             @ApiResponse(responseCode = OK, description = "가중치 파일 성공적 조회"),
-            @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, 가중치가 존재하지 않는 경우")
+            @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우, 가중치가 존재하지 않는 경우"),
+            @ApiResponse(responseCode = CONFLICT, description = "이미 가중치가 업데이트 되어 업데이트가 필요없는 경우")
     })
     @GetMapping("/weight")
     public ResponseEntity<byte[]> readWeightFile(@CurrentUserUsername String username) throws IOException{
