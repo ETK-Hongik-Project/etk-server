@@ -11,6 +11,7 @@ import Hongik.EyeTracking.common.response.error.exception.NotFoundException;
 import Hongik.EyeTracking.user.domain.User;
 import Hongik.EyeTracking.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.TimeUnit;
-
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -94,6 +95,6 @@ public class AuthService {
     }
 
     private void saveLoginProcessAtRedis(String key, TokenDto token) {
-        redisTemplate.opsForValue().set(key, token.getRefreshToken(), token.getRefreshTokenValidationTime(), TimeUnit.MICROSECONDS);
+        redisTemplate.opsForValue().set(key, token.getRefreshToken(), token.getRefreshTokenValidationTime(), TimeUnit.MILLISECONDS);
     }
 }
