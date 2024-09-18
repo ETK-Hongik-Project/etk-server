@@ -152,6 +152,13 @@ public class RestExceptionHandler {
                 .body(BaseResponse.createError(exception.getMessage()));
     }
 
+    @ExceptionHandler(ResourceAlreadyUpdatedException.class)
+    public ResponseEntity<BaseResponse<?>> handleResourceAlreadyUpdatedException(ResourceAlreadyUpdatedException exception,HttpServletRequest request) {
+        logInfo(request, exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(BaseResponse.createError(exception.getMessage()));
+    }
+
 
     private void logInfo(HttpServletRequest request, String message) {
 

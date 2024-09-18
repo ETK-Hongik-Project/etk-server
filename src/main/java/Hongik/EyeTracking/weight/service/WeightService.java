@@ -3,6 +3,7 @@ package Hongik.EyeTracking.weight.service;
 import Hongik.EyeTracking.common.response.error.ErrorCode;
 import Hongik.EyeTracking.common.response.error.exception.DuplicateException;
 import Hongik.EyeTracking.common.response.error.exception.NotFoundException;
+import Hongik.EyeTracking.common.response.error.exception.ResourceAlreadyUpdatedException;
 import Hongik.EyeTracking.image.domain.Image;
 import Hongik.EyeTracking.image.dto.ImageResponseDto;
 import Hongik.EyeTracking.user.domain.User;
@@ -77,7 +78,7 @@ public class WeightService {
 
         // 이미 가중치가 업데이트 된 경우 업데이트 불가
         if (weight.getIsUpdated()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "이미 업데이트 된 가중치입니다.");
+            throw new ResourceAlreadyUpdatedException("이미 업데이트 된 가중치입니다.");
         }
 
         FileInputStream weightInputStream = new FileInputStream(weight.getFilePath());
