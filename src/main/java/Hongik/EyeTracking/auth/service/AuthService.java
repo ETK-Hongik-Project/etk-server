@@ -65,10 +65,6 @@ public class AuthService {
         String key = authentication.getName();
         String storedRefreshToken = redisTemplate.opsForValue().get(key);
 
-        log.info("accessToken:{}", accessToken);
-        log.info("storedRefreshToken:{}", storedRefreshToken);
-        log.info("refreshToken:{}", refreshToken);
-
         // redis에서 꺼내온 refreshToken과 비교
         if (!storedRefreshToken.equals(refreshToken)) {
             throw new BadRequestException(ErrorCode.REFRESH_TOKEN_NOT_MATCH);
