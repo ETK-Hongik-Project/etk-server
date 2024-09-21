@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import org.apache.commons.io.IOUtils;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -50,7 +51,7 @@ public class ImageService {
         }
 
         // 파일 저장 경로
-        String fileDir = uploadDir + '/' + file.getOriginalFilename();
+        String fileDir = uploadDir + '/' + user.getId() + '/' + file.getOriginalFilename();
 
         // 파일 저장
         Path path = Paths.get(fileDir);
@@ -92,7 +93,7 @@ public class ImageService {
         InputStream imageStream = new FileInputStream(image.getFilePath());
 
         byte[] imageByteArray = IOUtils.toByteArray(imageStream);
-		imageStream.close();
+        imageStream.close();
 
         return imageByteArray;
     }

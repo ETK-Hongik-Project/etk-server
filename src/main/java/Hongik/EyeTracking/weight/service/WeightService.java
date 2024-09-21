@@ -51,7 +51,7 @@ public class WeightService {
         }
 
         // 파일 저장 경로
-        String fileDir = uploadDir + '/' + file.getOriginalFilename();
+        String fileDir = uploadDir + '/' + user.getId() + '/' + file.getOriginalFilename();
 
         // 파일 저장
         Path path = Paths.get(fileDir);
