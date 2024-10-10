@@ -13,727 +13,35 @@
     "JWT" : [ ]
   } ],
   "paths" : {
-    "/admin" : {
+    "/api/v1/weight" : {
       "get" : {
-        "tags" : [ "admin-controller" ],
-        "operationId" : "adminP",
+        "tags" : [ "weight-controller" ],
+        "summary" : "로그인 한 유저의 가중치 조회",
+        "operationId" : "readWeightFile",
         "responses" : {
-          "200" : {
-            "description" : "OK",
+          "409" : {
+            "description" : "이미 가중치가 업데이트 되어 업데이트가 필요없는 경우",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "type" : "string",
+                  "type" : "array",
                   "exampleSetFlag" : false,
-                  "types" : [ "string" ]
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/auth/login" : {
-      "post" : {
-        "tags" : [ "로그인 관련 컨트롤러" ],
-        "summary" : "username, password 기반 로그인",
-        "operationId" : "login",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/LogInRequestDto",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "description" : "로그인 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "400" : {
-            "description" : "아이디 or 비밀번호 틀림",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/auth/logout" : {
-      "post" : {
-        "tags" : [ "로그인 관련 컨트롤러" ],
-        "summary" : "로그아웃",
-        "description" : "로그아웃을 한다.",
-        "operationId" : "logout",
-        "parameters" : [ {
-          "name" : "accessToken",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          }
-        } ],
-        "responses" : {
-          "400" : {
-            "description" : "accessToken 이 만료되거나 틀렸을 때",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "200" : {
-            "description" : "로그아웃 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/auth/reissue" : {
-      "post" : {
-        "tags" : [ "로그인 관련 컨트롤러" ],
-        "summary" : "토큰 재발행",
-        "description" : "accessToken 의 만료로 지정된 자원에 접근할 수 없을 떄 사용, refreshToken 을 기반으로 accessToken 재발행",
-        "operationId" : "reIssue",
-        "parameters" : [ {
-          "name" : "accessToken",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          }
-        }, {
-          "name" : "refreshToken",
-          "in" : "header",
-          "required" : true,
-          "schema" : {
-            "type" : "string",
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          }
-        } ],
-        "responses" : {
-          "400" : {
-            "description" : "refreshToken 이 만료되거나 틀렸을 때",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "200" : {
-            "description" : "토큰 재발행 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/boards" : {
-      "get" : {
-        "tags" : [ "board-controller" ],
-        "summary" : "키워드로 board 조회",
-        "description" : "키워드가 입력되지 않을 시 전체 모든 board 반환",
-        "operationId" : "readBoard",
-        "parameters" : [ {
-          "name" : "keyword",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "board 성공적 조회",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadBoardResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "board-controller" ],
-        "summary" : "board 생성",
-        "operationId" : "createBoard",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreateBoardRequestDto",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "201" : {
-            "description" : "post 성공적 추가",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreateBoardResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "400" : {
-            "description" : "이미 동명의 board가 존재하는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreateBoardResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/boards/{boardId}" : {
-      "get" : {
-        "tags" : [ "board-controller" ],
-        "summary" : "pk로 board 조회",
-        "operationId" : "readBoard_1",
-        "parameters" : [ {
-          "name" : "boardId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "board 성공적 조회",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadBoardResponseDto",
-                  "exampleSetFlag" : false
+                  "items" : {
+                    "type" : "string",
+                    "format" : "byte",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
                 },
                 "exampleSetFlag" : false
               }
             }
           },
           "404" : {
-            "description" : "boardId를 가지는 board가 존재하지 않는 경우",
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, 가중치가 존재하지 않는 경우",
             "content" : {
               "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadBoardResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "board-controller" ],
-        "summary" : "pk로 board 제거",
-        "operationId" : "deleteBoard",
-        "parameters" : [ {
-          "name" : "boardId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "board 성공적 제거"
-          },
-          "404" : {
-            "description" : "boardId를 가지는 board가 존재하지 않는 경우"
-          }
-        }
-      }
-    },
-    "/api/v1/posts/{postId}/comments" : {
-      "get" : {
-        "tags" : [ "comment-controller" ],
-        "summary" : "post의 모든 comment 조회",
-        "operationId" : "readComments",
-        "parameters" : [ {
-          "name" : "postId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "responses" : {
-          "404" : {
-            "description" : "postId를 가지는 post가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "200" : {
-            "description" : "comment 조회 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "comment-controller" ],
-        "summary" : "post에 comment 등록",
-        "operationId" : "createComment",
-        "parameters" : [ {
-          "name" : "postId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreateCommentRequestDto",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "201" : {
-            "description" : "comment 성공적 추가",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/comments/{commentId}" : {
-      "get" : {
-        "tags" : [ "comment-controller" ],
-        "summary" : "특정 comment 조회",
-        "operationId" : "readComment",
-        "parameters" : [ {
-          "name" : "commentId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "comment 조회 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "404" : {
-            "description" : "commentId를 가지는 comment가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "comment-controller" ],
-        "summary" : "comment에 reply 등록",
-        "operationId" : "createReply",
-        "parameters" : [ {
-          "name" : "commentId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreateCommentRequestDto",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "201" : {
-            "description" : "reply 성공적 추가",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "comment-controller" ],
-        "summary" : "로그인 한 유저의 comment 제거",
-        "operationId" : "deleteComment",
-        "parameters" : [ {
-          "name" : "commentId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "comment 제거",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "400" : {
-            "description" : "유저의 comment가 아닌 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/comments" : {
-      "get" : {
-        "tags" : [ "comment-controller" ],
-        "summary" : "로그인 한 유저의 모든 comment 조회",
-        "operationId" : "readUserComments",
-        "responses" : {
-          "404" : {
-            "description" : "postId를 가지는 post가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadUserCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "200" : {
-            "description" : "comment 조회 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadUserCommentResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/images" : {
-      "get" : {
-        "tags" : [ "image-controller" ],
-        "summary" : "로그인 한 유저의 모든 이미지 조회",
-        "operationId" : "readImages",
-        "responses" : {
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListImageResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "200" : {
-            "description" : "이미지 조회 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListImageResponseDto",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "post" : {
-        "tags" : [ "image-controller" ],
-        "summary" : "로그인 한 유저의 이미지 저장",
-        "operationId" : "uploadImage",
-        "parameters" : [ {
-          "name" : "file",
-          "in" : "query",
-          "required" : true,
-          "schema" : {
-            "type" : "array",
-            "exampleSetFlag" : false,
-            "items" : {
-              "type" : "string",
-              "format" : "binary",
-              "exampleSetFlag" : false,
-              "types" : [ "string" ]
-            },
-            "types" : [ "array" ]
-          }
-        } ],
-        "responses" : {
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "201" : {
-            "description" : "이미지 성공적 추가",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      },
-      "delete" : {
-        "tags" : [ "image-controller" ],
-        "summary" : "로그인 한 유저의 모든 이미지 제거",
-        "operationId" : "deleteImage",
-        "responses" : {
-          "200" : {
-            "description" : "이미지 제거 성공",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/images/{image_id}" : {
-      "get" : {
-        "tags" : [ "image-controller" ],
-        "summary" : "로그인 한 유저의 특정 이미지 조회",
-        "operationId" : "readImage",
-        "parameters" : [ {
-          "name" : "image_id",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "responses" : {
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
-            "content" : {
-              "image/jpeg" : {
                 "schema" : {
                   "type" : "array",
                   "exampleSetFlag" : false,
@@ -750,9 +58,9 @@
             }
           },
           "200" : {
-            "description" : "이미지 조회 성공",
+            "description" : "가중치 파일 성공적 조회",
             "content" : {
-              "image/jpeg" : {
+              "*/*" : {
                 "schema" : {
                   "type" : "array",
                   "exampleSetFlag" : false,
@@ -769,52 +77,51 @@
             }
           }
         }
-      }
-    },
-    "/api/v1/boards/{boardId}/posts" : {
-      "get" : {
-        "tags" : [ "post-controller" ],
-        "summary" : "board의 post 조회",
-        "operationId" : "readPostsOfBoard",
-        "parameters" : [ {
-          "name" : "boardId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
+      },
+      "post" : {
+        "tags" : [ "weight-controller" ],
+        "summary" : "로그인 한 유저의 가중치 저장",
+        "operationId" : "uploadWeightFile",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "file" ],
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ]
+              },
+              "exampleSetFlag" : false
+            }
           }
-        }, {
-          "name" : "keyword",
-          "in" : "query",
-          "required" : false,
-          "schema" : {
-            "type" : "string",
-            "exampleSetFlag" : false,
-            "types" : [ "string" ]
-          }
-        } ],
+        },
         "responses" : {
           "404" : {
-            "description" : "boardId를 가지는 board가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseObject",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
               }
             }
           },
-          "200" : {
-            "description" : "post 성공적 조회",
+          "201" : {
+            "description" : "가중치 파일 성공적 추가",
             "content" : {
-              "*/*" : {
+              "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseObject",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -823,52 +130,29 @@
           }
         }
       },
-      "post" : {
-        "tags" : [ "post-controller" ],
-        "summary" : "post 생성",
-        "operationId" : "createPost",
-        "parameters" : [ {
-          "name" : "boardId",
-          "in" : "path",
-          "required" : true,
-          "schema" : {
-            "type" : "integer",
-            "format" : "int64",
-            "exampleSetFlag" : false,
-            "types" : [ "integer" ]
-          }
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/CreatePostRequestDto",
-                "exampleSetFlag" : false
-              },
-              "exampleSetFlag" : false
-            }
-          },
-          "required" : true
-        },
+      "delete" : {
+        "tags" : [ "weight-controller" ],
+        "summary" : "로그인 한 유저의 가중치 제거",
+        "operationId" : "deleteWeightFile",
         "responses" : {
-          "201" : {
-            "description" : "post 성공적 추가",
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreatePostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseObject",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
               }
             }
           },
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, boardId를 가지는 board가 존재하지 않는 경우",
+          "200" : {
+            "description" : "가중치 파일 성공적 제거",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseCreatePostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseObject",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -1042,18 +326,29 @@
         }
       }
     },
-    "/api/v1/posts" : {
+    "/api/v1/posts/{postId}/comments" : {
       "get" : {
-        "tags" : [ "post-controller" ],
-        "summary" : "로그인 한 유저의 post들 조회",
-        "operationId" : "readPostsOfUser",
+        "tags" : [ "comment-controller" ],
+        "summary" : "post의 모든 comment 조회",
+        "operationId" : "readComments",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
         "responses" : {
           "404" : {
-            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "description" : "postId를 가지는 post가 존재하지 않는 경우",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseListReadCommentResponseDto",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -1061,11 +356,11 @@
             }
           },
           "200" : {
-            "description" : "post 성공적 조회",
+            "description" : "comment 조회 성공",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseListReadCommentResponseDto",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -1073,32 +368,53 @@
             }
           }
         }
-      }
-    },
-    "/api/v1/commented-posts" : {
-      "get" : {
-        "tags" : [ "post-controller" ],
-        "summary" : "로그인 한 유저가 댓글을 단 post 조회",
-        "operationId" : "readCommentedPosts",
+      },
+      "post" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "post에 comment 등록",
+        "operationId" : "createComment",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCommentRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
         "responses" : {
           "404" : {
-            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
               }
             }
           },
-          "200" : {
-            "description" : "post 성공적 조회",
+          "201" : {
+            "description" : "comment 성공적 추가",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -1144,6 +460,593 @@
               "*/*" : {
                 "schema" : {
                   "$ref" : "#/components/schemas/BaseResponseCreateUserResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images" : {
+      "get" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 모든 이미지 조회",
+        "operationId" : "readImages",
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListImageResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "이미지 조회 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListImageResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 이미지 저장",
+        "operationId" : "uploadImage",
+        "parameters" : [ {
+          "name" : "file",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "format" : "binary",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "201" : {
+            "description" : "이미지 성공적 추가",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 모든 이미지 제거",
+        "operationId" : "deleteImage",
+        "responses" : {
+          "200" : {
+            "description" : "이미지 제거 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{commentId}" : {
+      "get" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "특정 comment 조회",
+        "operationId" : "readComment",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "comment 조회 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "commentId를 가지는 comment가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "comment에 reply 등록",
+        "operationId" : "createReply",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCommentRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "201" : {
+            "description" : "reply 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "로그인 한 유저의 comment 제거",
+        "operationId" : "deleteComment",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "comment 제거",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "유저의 comment가 아닌 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards" : {
+      "get" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "키워드로 board 조회",
+        "description" : "키워드가 입력되지 않을 시 전체 모든 board 반환",
+        "operationId" : "readBoard",
+        "parameters" : [ {
+          "name" : "keyword",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "board 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "board 생성",
+        "operationId" : "createBoard",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateBoardRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "post 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "이미 동명의 board가 존재하는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards/{boardId}/posts" : {
+      "get" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "board의 post 조회",
+        "operationId" : "readPostsOfBoard",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "keyword",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "boardId를 가지는 board가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "post 생성",
+        "operationId" : "createPost",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePostRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "post 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreatePostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, boardId를 가지는 board가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreatePostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reissue" : {
+      "post" : {
+        "tags" : [ "로그인 관련 컨트롤러" ],
+        "summary" : "토큰 재발행",
+        "description" : "accessToken 의 만료로 지정된 자원에 접근할 수 없을 떄 사용, refreshToken 을 기반으로 accessToken 재발행",
+        "operationId" : "reIssue",
+        "parameters" : [ {
+          "name" : "accessToken",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "refreshToken",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "refreshToken 이 만료되거나 틀렸을 때",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "토큰 재발행 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout" : {
+      "post" : {
+        "tags" : [ "로그인 관련 컨트롤러" ],
+        "summary" : "로그아웃",
+        "description" : "로그아웃을 한다.",
+        "operationId" : "logout",
+        "parameters" : [ {
+          "name" : "accessToken",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "accessToken 이 만료되거나 틀렸을 때",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "로그아웃 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login" : {
+      "post" : {
+        "tags" : [ "로그인 관련 컨트롤러" ],
+        "summary" : "username, password 기반 로그인",
+        "operationId" : "login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LogInRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "로그인 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "아이디 or 비밀번호 틀림",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -1217,35 +1120,60 @@
         }
       }
     },
-    "/api/v1/weight" : {
+    "/api/v1/posts" : {
       "get" : {
-        "tags" : [ "weight-controller" ],
-        "summary" : "로그인 한 유저의 가중치 조회",
-        "operationId" : "readWeightFile",
+        "tags" : [ "post-controller" ],
+        "summary" : "로그인 한 유저의 post들 조회",
+        "operationId" : "readPostsOfUser",
         "responses" : {
-          "409" : {
-            "description" : "이미 가중치가 업데이트 되어 업데이트가 필요없는 경우",
+          "404" : {
+            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "type" : "array",
-                  "exampleSetFlag" : false,
-                  "items" : {
-                    "type" : "string",
-                    "format" : "byte",
-                    "exampleSetFlag" : false,
-                    "types" : [ "string" ]
-                  },
-                  "types" : [ "array" ]
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
               }
             }
           },
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, 가중치가 존재하지 않는 경우",
+          "200" : {
+            "description" : "post 성공적 조회",
             "content" : {
               "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images/{image_id}" : {
+      "get" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 특정 이미지 조회",
+        "operationId" : "readImage",
+        "parameters" : [ {
+          "name" : "image_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "image/jpeg" : {
                 "schema" : {
                   "type" : "array",
                   "exampleSetFlag" : false,
@@ -1262,9 +1190,9 @@
             }
           },
           "200" : {
-            "description" : "가중치 파일 성공적 조회",
+            "description" : "이미지 조회 성공",
             "content" : {
-              "*/*" : {
+              "image/jpeg" : {
                 "schema" : {
                   "type" : "array",
                   "exampleSetFlag" : false,
@@ -1281,51 +1209,109 @@
             }
           }
         }
-      },
-      "post" : {
-        "tags" : [ "weight-controller" ],
-        "summary" : "로그인 한 유저의 가중치 저장",
-        "operationId" : "uploadWeightFile",
-        "requestBody" : {
-          "content" : {
-            "multipart/form-data" : {
-              "schema" : {
-                "required" : [ "file" ],
-                "type" : "object",
-                "properties" : {
-                  "file" : {
-                    "type" : "string",
-                    "format" : "binary",
-                    "exampleSetFlag" : false,
-                    "types" : [ "string" ]
-                  }
-                },
-                "exampleSetFlag" : false,
-                "types" : [ "object" ]
-              },
-              "exampleSetFlag" : false
-            }
-          }
-        },
+      }
+    },
+    "/api/v1/comments" : {
+      "get" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "로그인 한 유저의 모든 comment 조회",
+        "operationId" : "readUserComments",
         "responses" : {
           "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "description" : "postId를 가지는 post가 존재하지 않는 경우",
             "content" : {
-              "application/json" : {
+              "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "$ref" : "#/components/schemas/BaseResponseListReadUserCommentResponseDto",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
               }
             }
           },
-          "201" : {
-            "description" : "가중치 파일 성공적 추가",
+          "200" : {
+            "description" : "comment 조회 성공",
             "content" : {
-              "application/json" : {
+              "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "$ref" : "#/components/schemas/BaseResponseListReadUserCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commented-posts" : {
+      "get" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "로그인 한 유저가 댓글을 단 post 조회",
+        "operationId" : "readCommentedPosts",
+        "responses" : {
+          "404" : {
+            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards/{boardId}" : {
+      "get" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "pk로 board 조회",
+        "operationId" : "readBoard_1",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "board 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "boardId를 가지는 board가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadBoardResponseDto",
                   "exampleSetFlag" : false
                 },
                 "exampleSetFlag" : false
@@ -1335,29 +1321,43 @@
         }
       },
       "delete" : {
-        "tags" : [ "weight-controller" ],
-        "summary" : "로그인 한 유저의 가중치 제거",
-        "operationId" : "deleteWeightFile",
+        "tags" : [ "board-controller" ],
+        "summary" : "pk로 board 제거",
+        "operationId" : "deleteBoard",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
         "responses" : {
-          "404" : {
-            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
-            "content" : {
-              "*/*" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
-                },
-                "exampleSetFlag" : false
-              }
-            }
-          },
           "200" : {
-            "description" : "가중치 파일 성공적 제거",
+            "description" : "board 성공적 제거"
+          },
+          "404" : {
+            "description" : "boardId를 가지는 board가 존재하지 않는 경우"
+          }
+        }
+      }
+    },
+    "/admin" : {
+      "get" : {
+        "tags" : [ "admin-controller" ],
+        "operationId" : "adminP",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
             "content" : {
               "*/*" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/BaseResponseObject",
-                  "exampleSetFlag" : false
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
                 },
                 "exampleSetFlag" : false
               }

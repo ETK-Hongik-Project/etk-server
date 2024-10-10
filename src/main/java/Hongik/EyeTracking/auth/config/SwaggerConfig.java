@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-@Import(SwaggyConfig.class)
+//@Import(SwaggyConfig.class)
 public class SwaggerConfig {
 
     @Bean
@@ -40,8 +40,8 @@ public class SwaggerConfig {
                 .version("v1"); // API의 버전
     }
 
-    @Bean
-    public OpenApiCustomizer openApiCustomizer() {
-        return new OpenApiChangeTracker();
-    }
+//    @Bean
+//    public OpenApiCustomizer openApiCustomizer() {
+//        return new OpenApiChangeTracker();
+//    }
 }
