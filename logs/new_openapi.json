@@ -1,0 +1,2126 @@
+{
+  "openapi" : "3.0.1",
+  "info" : {
+    "title" : "etk",
+    "description" : "시선추적 키보드",
+    "version" : "v1"
+  },
+  "servers" : [ {
+    "url" : "http://localhost:8080",
+    "description" : "Generated server url"
+  } ],
+  "security" : [ {
+    "JWT" : [ ]
+  } ],
+  "paths" : {
+    "/admin" : {
+      "get" : {
+        "tags" : [ "admin-controller" ],
+        "operationId" : "adminP",
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "string",
+                  "exampleSetFlag" : false,
+                  "types" : [ "string" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login" : {
+      "post" : {
+        "tags" : [ "로그인 관련 컨트롤러" ],
+        "summary" : "username, password 기반 로그인",
+        "operationId" : "login",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/LogInRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "로그인 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "아이디 or 비밀번호 틀림",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/logout" : {
+      "post" : {
+        "tags" : [ "로그인 관련 컨트롤러" ],
+        "summary" : "로그아웃",
+        "description" : "로그아웃을 한다.",
+        "operationId" : "logout",
+        "parameters" : [ {
+          "name" : "accessToken",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "accessToken 이 만료되거나 틀렸을 때",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "로그아웃 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/reissue" : {
+      "post" : {
+        "tags" : [ "로그인 관련 컨트롤러" ],
+        "summary" : "토큰 재발행",
+        "description" : "accessToken 의 만료로 지정된 자원에 접근할 수 없을 떄 사용, refreshToken 을 기반으로 accessToken 재발행",
+        "operationId" : "reIssue",
+        "parameters" : [ {
+          "name" : "accessToken",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        }, {
+          "name" : "refreshToken",
+          "in" : "header",
+          "required" : true,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "refreshToken 이 만료되거나 틀렸을 때",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "토큰 재발행 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards" : {
+      "get" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "키워드로 board 조회",
+        "description" : "키워드가 입력되지 않을 시 전체 모든 board 반환",
+        "operationId" : "readBoard",
+        "parameters" : [ {
+          "name" : "keyword",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "board 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "board 생성",
+        "operationId" : "createBoard",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateBoardRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "post 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "이미 동명의 board가 존재하는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards/{boardId}" : {
+      "get" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "pk로 board 조회",
+        "operationId" : "readBoard_1",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "board 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "boardId를 가지는 board가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadBoardResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "board-controller" ],
+        "summary" : "pk로 board 제거",
+        "operationId" : "deleteBoard",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "board 성공적 제거"
+          },
+          "404" : {
+            "description" : "boardId를 가지는 board가 존재하지 않는 경우"
+          }
+        }
+      }
+    },
+    "/api/v1/posts/{postId}/comments" : {
+      "get" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "post의 모든 comment 조회",
+        "operationId" : "readComments",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "comment 조회 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "post에 comment 등록",
+        "operationId" : "createComment",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCommentRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "201" : {
+            "description" : "comment 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comments/{commentId}" : {
+      "get" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "특정 comment 조회",
+        "operationId" : "readComment",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "comment 조회 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "commentId를 가지는 comment가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "comment에 reply 등록",
+        "operationId" : "createReply",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateCommentRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "201" : {
+            "description" : "reply 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "로그인 한 유저의 comment 제거",
+        "operationId" : "deleteComment",
+        "parameters" : [ {
+          "name" : "commentId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "comment 제거",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "유저의 comment가 아닌 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, commentId를 가지는 comment가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/comments" : {
+      "get" : {
+        "tags" : [ "comment-controller" ],
+        "summary" : "로그인 한 유저의 모든 comment 조회",
+        "operationId" : "readUserComments",
+        "responses" : {
+          "404" : {
+            "description" : "postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadUserCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "comment 조회 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadUserCommentResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images" : {
+      "get" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 모든 이미지 조회",
+        "operationId" : "readImages",
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListImageResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "이미지 조회 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListImageResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 이미지 저장",
+        "operationId" : "uploadImage",
+        "parameters" : [ {
+          "name" : "file",
+          "in" : "query",
+          "required" : true,
+          "schema" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "type" : "string",
+              "format" : "binary",
+              "exampleSetFlag" : false,
+              "types" : [ "string" ]
+            },
+            "types" : [ "array" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "201" : {
+            "description" : "이미지 성공적 추가",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 모든 이미지 제거",
+        "operationId" : "deleteImage",
+        "responses" : {
+          "200" : {
+            "description" : "이미지 제거 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/images/{image_id}" : {
+      "get" : {
+        "tags" : [ "image-controller" ],
+        "summary" : "로그인 한 유저의 특정 이미지 조회",
+        "operationId" : "readImage",
+        "parameters" : [ {
+          "name" : "image_id",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "image/jpeg" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "type" : "string",
+                    "format" : "byte",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "이미지 조회 성공",
+            "content" : {
+              "image/jpeg" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "type" : "string",
+                    "format" : "byte",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/boards/{boardId}/posts" : {
+      "get" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "board의 post 조회",
+        "operationId" : "readPostsOfBoard",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        }, {
+          "name" : "keyword",
+          "in" : "query",
+          "required" : false,
+          "schema" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "boardId를 가지는 board가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "post 생성",
+        "operationId" : "createPost",
+        "parameters" : [ {
+          "name" : "boardId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreatePostRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "post 성공적 추가",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreatePostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, boardId를 가지는 board가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreatePostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/posts/{postId}" : {
+      "get" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "PK로 post 조회",
+        "operationId" : "readPost",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "404" : {
+            "description" : "postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "로그인 한 유저의 post 수정",
+        "operationId" : "modifyPost",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/ModifyPostRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "description" : "post 성공적 수정",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseModifyPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "user의 post가 아닌 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseModifyPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseModifyPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "로그인 한 유저의 post 제거",
+        "operationId" : "deletePost",
+        "parameters" : [ {
+          "name" : "postId",
+          "in" : "path",
+          "required" : true,
+          "schema" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        } ],
+        "responses" : {
+          "400" : {
+            "description" : "user의 post가 아닌 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 제거",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/posts" : {
+      "get" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "로그인 한 유저의 post들 조회",
+        "operationId" : "readPostsOfUser",
+        "responses" : {
+          "404" : {
+            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/commented-posts" : {
+      "get" : {
+        "tags" : [ "post-controller" ],
+        "summary" : "로그인 한 유저가 댓글을 단 post 조회",
+        "operationId" : "readCommentedPosts",
+        "responses" : {
+          "404" : {
+            "description" : "username을 가지는 user가 존재하지 않는 경우, postId를 가지는 post가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "post 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseListReadPostResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/join" : {
+      "post" : {
+        "tags" : [ "user-controller" ],
+        "summary" : "회원가입",
+        "operationId" : "join",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/CreateUserRequestDto",
+                "exampleSetFlag" : false
+              },
+              "exampleSetFlag" : false
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "201" : {
+            "description" : "회원가입 성공",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateUserResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "400" : {
+            "description" : "이미 사용중인 username, 이미 사용중인 email",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseCreateUserResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/user" : {
+      "get" : {
+        "tags" : [ "user-controller" ],
+        "summary" : "user 조회",
+        "operationId" : "readUser",
+        "responses" : {
+          "200" : {
+            "description" : "user 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadUserResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseReadUserResponseDto",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "user-controller" ],
+        "summary" : "회원 탈퇴",
+        "operationId" : "deleteUser",
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "user 성공적 제거",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/weight" : {
+      "get" : {
+        "tags" : [ "weight-controller" ],
+        "summary" : "로그인 한 유저의 가중치 조회",
+        "operationId" : "readWeightFile",
+        "responses" : {
+          "409" : {
+            "description" : "이미 가중치가 업데이트 되어 업데이트가 필요없는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "type" : "string",
+                    "format" : "byte",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우, 가중치가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "type" : "string",
+                    "format" : "byte",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "가중치 파일 성공적 조회",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "type" : "array",
+                  "exampleSetFlag" : false,
+                  "items" : {
+                    "type" : "string",
+                    "format" : "byte",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  },
+                  "types" : [ "array" ]
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "weight-controller" ],
+        "summary" : "로그인 한 유저의 가중치 저장",
+        "operationId" : "uploadWeightFile",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "required" : [ "file" ],
+                "type" : "object",
+                "properties" : {
+                  "file" : {
+                    "type" : "string",
+                    "format" : "binary",
+                    "exampleSetFlag" : false,
+                    "types" : [ "string" ]
+                  }
+                },
+                "exampleSetFlag" : false,
+                "types" : [ "object" ]
+              },
+              "exampleSetFlag" : false
+            }
+          }
+        },
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "201" : {
+            "description" : "가중치 파일 성공적 추가",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "weight-controller" ],
+        "summary" : "로그인 한 유저의 가중치 제거",
+        "operationId" : "deleteWeightFile",
+        "responses" : {
+          "404" : {
+            "description" : "해당 username을 가지는 유저가 존재하지 않는 경우",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          },
+          "200" : {
+            "description" : "가중치 파일 성공적 제거",
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/BaseResponseObject",
+                  "exampleSetFlag" : false
+                },
+                "exampleSetFlag" : false
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components" : {
+    "schemas" : {
+      "BaseResponseObject" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "type" : "object",
+            "exampleSetFlag" : false,
+            "types" : [ "object" ],
+            "jsonSchema" : {
+              "type" : "object"
+            }
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ModifyPostRequestDto" : {
+        "required" : [ "content" ],
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseModifyPostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/ModifyPostResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ModifyPostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "postId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "modifiedTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreateCommentRequestDto" : {
+        "required" : [ "content" ],
+        "type" : "object",
+        "properties" : {
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseCreateCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CreateCommentResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreateCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "commentId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "createdTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreateUserRequestDto" : {
+        "required" : [ "email", "name", "password", "username" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "username" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "password" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "email" : {
+            "pattern" : "^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])+[.][a-zA-Z]{2,3}$",
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseCreateUserResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CreateUserResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreateUserResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "userId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreateBoardRequestDto" : {
+        "required" : [ "name" ],
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseCreateBoardResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CreateBoardResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreateBoardResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "boardId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreatePostRequestDto" : {
+        "required" : [ "content", "isAnonymous", "title" ],
+        "type" : "object",
+        "properties" : {
+          "title" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "isAnonymous" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseCreatePostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/CreatePostResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "CreatePostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "postId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "createdTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "LogInRequestDto" : {
+        "required" : [ "password", "username" ],
+        "type" : "object",
+        "properties" : {
+          "username" : {
+            "type" : "string",
+            "description" : "사용자의 로그인 아이디",
+            "example" : "id",
+            "exampleSetFlag" : true,
+            "types" : [ "string" ]
+          },
+          "password" : {
+            "type" : "string",
+            "description" : "사용자의 로그인 비밀번호",
+            "example" : "password",
+            "exampleSetFlag" : true,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseReadUserResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/ReadUserResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ReadUserResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "username" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "email" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseListReadPostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ReadPostResponseDto",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ReadPostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "postId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "title" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "authorName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "createdTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseReadPostResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/ReadPostResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseListReadCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ReadCommentResponseDto",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ReadCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "commentId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "commenterName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "isDeleted" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "createdTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "replies" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ReadReplyResponseDto",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ReadReplyResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "commentId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "commenterName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "isDeleted" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          },
+          "createdTime" : {
+            "type" : "string",
+            "format" : "date-time",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseListImageResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ImageResponseDto",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ImageResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "id" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "path" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseListReadUserCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ReadUserCommentResponseDto",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ReadUserCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "commentId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          },
+          "postTitle" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "postContent" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "content" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "commenterName" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "isDeleted" : {
+            "type" : "boolean",
+            "exampleSetFlag" : false,
+            "types" : [ "boolean" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseReadCommentResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/ReadCommentResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseListReadBoardResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "type" : "array",
+            "exampleSetFlag" : false,
+            "items" : {
+              "$ref" : "#/components/schemas/ReadBoardResponseDto",
+              "exampleSetFlag" : false
+            },
+            "types" : [ "array" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "ReadBoardResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "name" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "boardId" : {
+            "type" : "integer",
+            "format" : "int64",
+            "exampleSetFlag" : false,
+            "types" : [ "integer" ]
+          }
+        },
+        "exampleSetFlag" : false
+      },
+      "BaseResponseReadBoardResponseDto" : {
+        "type" : "object",
+        "properties" : {
+          "status" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "message" : {
+            "type" : "string",
+            "exampleSetFlag" : false,
+            "types" : [ "string" ]
+          },
+          "data" : {
+            "$ref" : "#/components/schemas/ReadBoardResponseDto",
+            "exampleSetFlag" : false
+          }
+        },
+        "exampleSetFlag" : false
+      }
+    },
+    "securitySchemes" : {
+      "JWT" : {
+        "type" : "HTTP",
+        "scheme" : "bearer",
+        "bearerFormat" : "JWT"
+      }
+    }
+  }
+}

@@ -1,0 +1,375 @@
+[ {
+  "schemaChanges" : [ {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseObject",
+    "pathInfo" : [ {
+      "path" : "/api/v1/auth/login",
+      "method" : "post"
+    }, {
+      "path" : "/api/v1/auth/logout",
+      "method" : "post"
+    }, {
+      "path" : "/api/v1/auth/reissue",
+      "method" : "post"
+    }, {
+      "path" : "/api/v1/images",
+      "method" : "delete"
+    }, {
+      "path" : "/api/v1/posts/{postId}",
+      "method" : "delete"
+    }, {
+      "path" : "/api/v1/user",
+      "method" : "delete"
+    }, {
+      "path" : "/api/v1/weight",
+      "method" : "delete"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ModifyPostRequestDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/posts/{postId}",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseModifyPostResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/posts/{postId}",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ModifyPostResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreateCommentRequestDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/posts/{postId}/comments",
+      "method" : "post"
+    }, {
+      "path" : "/api/v1/comments/{commentId}",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseCreateCommentResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/posts/{postId}/comments",
+      "method" : "post"
+    }, {
+      "path" : "/api/v1/comments/{commentId}",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreateCommentResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreateUserRequestDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/join",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseCreateUserResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/join",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreateUserResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreateBoardRequestDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseCreateBoardResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreateBoardResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreatePostRequestDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards/{boardId}/posts",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseCreatePostResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards/{boardId}/posts",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "CreatePostResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "LogInRequestDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/auth/login",
+      "method" : "post"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseReadUserResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/user",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ReadUserResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseListReadPostResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards/{boardId}/posts",
+      "method" : "get"
+    }, {
+      "path" : "/api/v1/posts",
+      "method" : "get"
+    }, {
+      "path" : "/api/v1/commented-posts",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ReadPostResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseReadPostResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/posts/{postId}",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseListReadCommentResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/posts/{postId}/comments",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ReadCommentResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ReadReplyResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseListImageResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/images",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ImageResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseListReadUserCommentResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/comments",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ReadUserCommentResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseReadCommentResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/comments/{commentId}",
+      "method" : "get"
+    }, {
+      "path" : "/api/v1/comments/{commentId}",
+      "method" : "delete"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseListReadBoardResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards",
+      "method" : "get"
+    } ]
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "ReadBoardResponseDto"
+  }, {
+    "changeType" : "schemaAdded",
+    "schemaName" : "BaseResponseReadBoardResponseDto",
+    "pathInfo" : [ {
+      "path" : "/api/v1/boards/{boardId}",
+      "method" : "get"
+    } ]
+  } ],
+  "version" : "2024-10-10 14:06:55",
+  "endpointChanges" : [ {
+    "endpoint" : "/admin",
+    "method" : "get",
+    "changeType" : "endpointAdded"
+  }, {
+    "endpoint" : "/api/v1/auth/login",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "username, password 기반 로그인"
+  }, {
+    "endpoint" : "/api/v1/auth/logout",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그아웃"
+  }, {
+    "endpoint" : "/api/v1/auth/reissue",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "토큰 재발행"
+  }, {
+    "endpoint" : "/api/v1/boards",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "키워드로 board 조회"
+  }, {
+    "endpoint" : "/api/v1/boards",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "board 생성"
+  }, {
+    "endpoint" : "/api/v1/boards/{boardId}",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "pk로 board 조회"
+  }, {
+    "endpoint" : "/api/v1/boards/{boardId}",
+    "method" : "delete",
+    "changeType" : "endpointAdded",
+    "newSummary" : "pk로 board 제거"
+  }, {
+    "endpoint" : "/api/v1/posts/{postId}/comments",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "post의 모든 comment 조회"
+  }, {
+    "endpoint" : "/api/v1/posts/{postId}/comments",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "post에 comment 등록"
+  }, {
+    "endpoint" : "/api/v1/comments/{commentId}",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "특정 comment 조회"
+  }, {
+    "endpoint" : "/api/v1/comments/{commentId}",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "comment에 reply 등록"
+  }, {
+    "endpoint" : "/api/v1/comments/{commentId}",
+    "method" : "delete",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 comment 제거"
+  }, {
+    "endpoint" : "/api/v1/comments",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 모든 comment 조회"
+  }, {
+    "endpoint" : "/api/v1/images",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 모든 이미지 조회"
+  }, {
+    "endpoint" : "/api/v1/images",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 이미지 저장"
+  }, {
+    "endpoint" : "/api/v1/images",
+    "method" : "delete",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 모든 이미지 제거"
+  }, {
+    "endpoint" : "/api/v1/images/{image_id}",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 특정 이미지 조회"
+  }, {
+    "endpoint" : "/api/v1/boards/{boardId}/posts",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "board의 post 조회"
+  }, {
+    "endpoint" : "/api/v1/boards/{boardId}/posts",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "post 생성"
+  }, {
+    "endpoint" : "/api/v1/posts/{postId}",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "PK로 post 조회"
+  }, {
+    "endpoint" : "/api/v1/posts/{postId}",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 post 수정"
+  }, {
+    "endpoint" : "/api/v1/posts/{postId}",
+    "method" : "delete",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 post 제거"
+  }, {
+    "endpoint" : "/api/v1/posts",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 post들 조회"
+  }, {
+    "endpoint" : "/api/v1/commented-posts",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저가 댓글을 단 post 조회"
+  }, {
+    "endpoint" : "/api/v1/join",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "회원가입"
+  }, {
+    "endpoint" : "/api/v1/user",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "user 조회"
+  }, {
+    "endpoint" : "/api/v1/user",
+    "method" : "delete",
+    "changeType" : "endpointAdded",
+    "newSummary" : "회원 탈퇴"
+  }, {
+    "endpoint" : "/api/v1/weight",
+    "method" : "get",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 가중치 조회"
+  }, {
+    "endpoint" : "/api/v1/weight",
+    "method" : "post",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 가중치 저장"
+  }, {
+    "endpoint" : "/api/v1/weight",
+    "method" : "delete",
+    "changeType" : "endpointAdded",
+    "newSummary" : "로그인 한 유저의 가중치 제거"
+  } ]
+} ]
