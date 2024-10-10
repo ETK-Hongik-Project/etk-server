@@ -5,15 +5,12 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
-import io.swaggy.swagger.customlib.config.SwaggyConfig;
-import io.swaggy.swagger.customlib.utils.OpenApiChangeTracker;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 @Configuration
-//@Import(SwaggyConfig.class)
 public class SwaggerConfig {
 
     @Bean
@@ -39,9 +36,4 @@ public class SwaggerConfig {
                 .description("시선추적 키보드") // API에 대한 설명
                 .version("v1"); // API의 버전
     }
-
-//    @Bean
-//    public OpenApiCustomizer openApiCustomizer() {
-//        return new OpenApiChangeTracker();
-//    }
 }
