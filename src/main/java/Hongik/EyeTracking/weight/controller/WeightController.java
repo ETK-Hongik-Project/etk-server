@@ -2,6 +2,7 @@ package Hongik.EyeTracking.weight.controller;
 
 import Hongik.EyeTracking.auth.interfaces.CurrentUserUsername;
 import Hongik.EyeTracking.common.response.BaseResponse;
+import Hongik.EyeTracking.user.service.UserService;
 import Hongik.EyeTracking.weight.dto.WeightResponseDto;
 import Hongik.EyeTracking.weight.service.WeightService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,7 @@ import static Hongik.EyeTracking.common.response.HttpResponse.*;
 @Slf4j
 public class WeightController {
     private final WeightService weightService;
+    private final UserService userService;
 
     @Operation(summary = "로그인 한 유저의 가중치 저장")
     @ApiResponses(value = {
@@ -65,5 +67,21 @@ public class WeightController {
         byte[] response = weightService.getWeight(username);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @Operation(summary = "유저의 가중치 저장")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = CREATED, description = "가중치 파일 성공적 추가"),
+            @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
+    })
+    @PostMapping(value = "/weight/{userId}", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<BaseResponse> uploadWeightFile(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file) throws IOException {
+        // 기존 가중치 제거
+        weightService.deleteWeightIfExists(userId);
+
+        // 새로운 가중치 업로드
+        WeightResponseDto responseDto = weightService.createWeight(userId, file);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(BaseResponse.createSuccess(responseDto));
     }
 }

@@ -69,6 +69,37 @@ public class WeightService {
     }
 
     @Transactional
+    public WeightResponseDto createWeight(Long userId, MultipartFile file) throws IOException {
+        User user = userRepository.findById(userId).orElseThrow(() ->
+                new NotFoundException(ErrorCode.USER_NOT_FOUND)
+        );
+        // 한 user당 가중치는 하나밖에 가질 수 없음.
+        weightRepository.findByUserId(user.getId())
+                .ifPresent(weight -> new DuplicateException(ErrorCode.WEIGHT_ALREADY_EXISTS));
+
+        if (file.isEmpty()) {
+            throw new IOException("Failed to store empty file.");
+        }
+
+        // 파일 저장 경로
+        String fileDir = uploadDir + '/' + user.getId() + '/' + file.getOriginalFilename();
+
+        // 파일 저장
+        Path path = Paths.get(fileDir);
+        Files.createDirectories(path.getParent());
+        Files.write(path, file.getBytes());
+
+        // DB에 가중치 정보 저장
+        Weight weight = Weight.builder()
+                .fileName(file.getOriginalFilename())
+                .filePath(path.toString())
+                .user(user)
+                .build();
+
+        return WeightResponseDto.from(weightRepository.save(weight));
+    }
+
+    @Transactional
     public byte[] getWeight(String username) throws IOException {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
@@ -113,6 +144,24 @@ public class WeightService {
     @Transactional
     public void deleteWeightIfExists(String username) throws IOException {
         User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
+
+        weightRepository.findByUserId(user.getId())
+                .ifPresent(weight -> {
+                    try {
+                        Path path = Paths.get(weight.getFilePath());
+                        Files.deleteIfExists(path);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        throw new RuntimeException(e);
+                    }
+                    weightRepository.delete(weight);
+                });
+    }
+
+    @Transactional
+    public void deleteWeightIfExists(Long userId) throws IOException {
+        User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.USER_NOT_FOUND));
 
         weightRepository.findByUserId(user.getId())
