@@ -16,6 +16,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_MATCH("리프레시 토큰을 확인해주세요"),
     NOT_USER_POST("해당 유저의 게시물이 아닙니다"),
     NOT_USER_COMMENT("유저의 댓글이 아닙니다"),
+    NOT_USER_JSON("유저의 json 파일이 아닙니다"),
     PASSWORD_NOT_MATCH("잘못된 비밀번호입니다"),
 
 

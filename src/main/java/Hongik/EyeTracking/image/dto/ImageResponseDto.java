@@ -13,7 +13,6 @@ public class ImageResponseDto {
     private String name;
     private String path;
 
-    @Builder
     public static ImageResponseDto from(Image image) {
         ImageResponseDto responseDto = new ImageResponseDto();
 
