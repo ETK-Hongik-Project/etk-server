@@ -16,6 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +61,7 @@ public class JsonService {
         Json json = Json.builder()
                 .user(user)
                 .fileName(fileName)
-                .filePath(fileDir)
+                .filePath(fileDir+'/'+fileName)
                 .build();
 
         jsonRepository.save(json);
@@ -94,8 +97,15 @@ public class JsonService {
         User user = userRepository.findByUsername(username).orElseThrow(() ->
                 new NotFoundException(ErrorCode.USER_NOT_FOUND)
         );
-
-        jsonRepository.deleteById(jsonId);
+        Json json = jsonRepository.findByUserIdAndId(user.getId(), jsonId)
+                .orElseThrow(() -> new NotFoundException(ErrorCode.NOT_USER_JSON));
+        try {
+            Path path = Paths.get(json.getFilePath());
+            Files.deleteIfExists(path);
+            jsonRepository.deleteById(jsonId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Transactional
@@ -104,6 +114,20 @@ public class JsonService {
                 new NotFoundException(ErrorCode.USER_NOT_FOUND)
         );
 
-        jsonRepository.deleteAllByUserId(user.getId());
+        List<Json> jsons = jsonRepository.findByUserId(user.getId());
+
+        for (Json json : jsons) {
+            try {
+                System.out.println("image.getFilePath() = " + json.getFilePath());
+
+                Path path = Paths.get(json.getFilePath());
+                Files.deleteIfExists(path);
+
+                jsonRepository.delete(json);
+            } catch (IOException e) {
+                // 로그를 출력하거나, 예외를 던질 수 있습니다.
+                e.printStackTrace();
+            }
+        }
     }
 }
