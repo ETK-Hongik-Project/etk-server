@@ -17,7 +17,7 @@ public class Image {
     @Column(nullable = false, unique = true)
     private String fileName;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
