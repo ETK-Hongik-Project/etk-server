@@ -72,7 +72,8 @@ public class WeightController {
     @Operation(summary = "유저의 가중치 저장")
     @ApiResponses(value = {
             @ApiResponse(responseCode = CREATED, description = "가중치 파일 성공적 추가"),
-            @ApiResponse(responseCode = NOT_FOUND, description = "해당 username을 가지는 유저가 존재하지 않는 경우")
+            @ApiResponse(responseCode = NOT_FOUND, description = "해당 userId를 가지는 유저가 존재하지 않는 경우"),
+            @ApiResponse(responseCode = CONFLICT, description = "가중치가 중복으로 존재하는 경우"),
     })
     @PostMapping(value = "/weight/{userId}", produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<BaseResponse> uploadWeightFile(@PathVariable("userId") Long userId, @RequestParam("file") MultipartFile file) throws IOException {
