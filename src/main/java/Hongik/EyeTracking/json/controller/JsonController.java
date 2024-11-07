@@ -23,8 +23,8 @@ public class JsonController {
     public ResponseEntity<JsonResponseDto> uploadJson(@CurrentUserUsername String username, @RequestBody JsonUploadRequestDto requestDto) {
         String json = requestDto.getData();
         JsonResponseDto response = jsonService.createJson(username, json);
-        
-        return ResponseEntity.status(HttpStatus.OK).body(response);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/json/{jsonId}")
