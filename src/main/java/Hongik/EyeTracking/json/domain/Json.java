@@ -17,7 +17,7 @@ public class Json {
     @Column(nullable = false, unique = true)
     private String fileName;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String filePath;
 
     @ManyToOne(fetch = FetchType.LAZY)
