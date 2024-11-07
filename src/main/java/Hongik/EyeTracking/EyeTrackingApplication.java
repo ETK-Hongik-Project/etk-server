@@ -19,16 +19,24 @@ public class EyeTrackingApplication {
     @Value("${upload.directory.weight}")
     private String weightUploadDirectory;
 
+    @Value("${upload.directory.json}")
+    private String jsonUploadDirectory;
+
     @PostConstruct
     public void init() {
         File imageDirectory = new File(imageUploadDirectory);
         if (!imageDirectory.exists()) {
-            imageDirectory.mkdirs(); // 디렉터리 생성
+            imageDirectory.mkdirs(); // 이미지 디렉터리 생성
         }
 
         File weightDirectory = new File(weightUploadDirectory);
         if (!weightDirectory.exists()) {
-            weightDirectory.mkdirs(); // 디렉터리 생성
+            weightDirectory.mkdirs(); // 가중치 디렉터리 생성
+        }
+
+        File jsonDirectory = new File(jsonUploadDirectory);
+        if (!jsonDirectory.exists()) {
+            jsonDirectory.mkdirs(); // json 디렉터리 생성
         }
     }
 
