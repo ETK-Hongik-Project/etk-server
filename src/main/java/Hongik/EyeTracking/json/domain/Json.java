@@ -14,7 +14,7 @@ public class Json {
     @Column(name = "json_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String fileName;
 
     @Column(nullable = false)
